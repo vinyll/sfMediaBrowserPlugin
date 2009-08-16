@@ -1,0 +1,69 @@
+#sf_media_browser_forms {
+  border-bottom:  1px solid #CCC;
+  margin-bottom:  10px;
+  padding-bottom: 10px;
+}
+
+h2 {
+  clear:  both;
+}
+
+fieldset#sf_media_browser_upload, fieldset#sf_media_browser_mkdir {
+  border: 0;
+  float:      left;
+  background: #EEE;
+  border:     1px solid #CCC;
+  padding-top:  20px;
+  margin-top:   20px;
+}
+#sf_media_browser_upload legend, #sf_media_browser_mkdir legend {
+  font-weight:  bold;
+  margin-top:   -20px;
+  border-bottom:  1px solid #CCC;
+}
+
+
+ul#sf_media_browser_list {
+  list-style: none;
+  clear:      both;
+}
+ul#sf_media_browser_list li {
+  float:        left;
+  margin:       0 10px 10px 0;
+  min-width:    100px;
+  background:   #EEE;
+  border:       1px solid #999;
+  text-align:   center;
+}
+ul#sf_media_browser_list a {
+  display:  block;
+}
+ul#sf_media_browser_list img {
+  border:     none;
+  margin:     10px 0 10px 0;
+}
+ul#sf_media_browser_list .name {
+  font-size:    .8em;
+  background:   #999;
+  color:        #FFF;
+  padding:      2px;
+  height:       17px;
+}
+#sf_media_browser_list .action .delete {
+  float:        right;
+  display:      block;
+  text-indent:  -5000px;
+  width:        16px;
+  height:       16px;
+  background:   transparent url('/sfMediaBrowserPlugin/images/icons-16/trash.png')
+}
+
+#sf_media_browser_list .action span {
+  float:        left;
+  margin-right: 10px;
+  font-size:    .7em;
+}
+
+.clear {
+  clear: both;
+}

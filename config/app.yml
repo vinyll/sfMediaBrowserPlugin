@@ -1,0 +1,3 @@
+all:
+  sf_media_browser:
+    root_dir:   uploads
