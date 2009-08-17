@@ -1,18 +1,30 @@
 sfMediaBrowserWindowManager = {
-  getInstance: function() {
-    alert('init');
-  },
+  
   open: function(params) {
     var width = window.innerWidth ? window.innerWidth*.8 : 500;
-    var popup = window.open(params['url'], 'sfMediaBrowser', 'width='+width+',addressbar=0,scrollbars=1');
-    params['popup'] = popup;
-    window.window_manager = new sfMediaBrowserWindowManagerObject(params);
+    params['popup'] = window.open(params['url'], 'sfMediaBrowser', 'width='+width+',addressbar=0,scrollbars=1');
+    return new sfMediaBrowserWindowManagerObject(params);
   },
   
   addListerner: function(params) {
-    document.getElementById(params['target']).onclick = function() {
-      sfMediaBrowserWindowManager.open(params);
+    var event = params['event'] ? params['event'] : 'onclick';
+    params['target'] = document.getElementById(params['target']);
+    params['target'][event] = function() {
+      var window_manager = sfMediaBrowserWindowManager.open(params);
+      window.window_manager = window_manager;
     }
+  },
+  
+  tinymceCallback: function(field_name, url, type, win) {
+    var window_manager = sfMediaBrowserWindowManager.open({
+      target: win.document.getElementById(field_name),
+      url:    '/backend_dev.php/sf_media_browser_select'
+    });
+    win.onunload = function() {
+      window_manager.popup.close();
+    }
+    window_manager.popup.opener = win;
+    window_manager.popup.opener.window_manager = window_manager;
   }
   
 };
@@ -23,6 +35,13 @@ function sfMediaBrowserWindowManagerObject(params) {
 }
 
 sfMediaBrowserWindowManagerObject.prototype.callback = function(value) {
-  document.getElementById(this.target).value = value;
+  this.getTarget().value = value;
   this.popup.close();
 }
+sfMediaBrowserWindowManagerObject.prototype.getTarget = function() {
+  if(this.target.getAttribute)
+    return this.target;
+  else
+    return this.popup.opener.document.getElementById(this.target);
+}
+
