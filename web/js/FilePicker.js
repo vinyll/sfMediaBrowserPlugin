@@ -19,8 +19,8 @@ sfMediaBrowserFilePicker = {
     return element.getAttribute('class').indexOf(class_name) != -1;
   },
   callback: function(url) {
-    window.opener.document.getElementById(window.name).value = url;
-    return window.close();
+    var window_manager = window.opener.window_manager;
+    window_manager.callback(url);
   }
 };
 
