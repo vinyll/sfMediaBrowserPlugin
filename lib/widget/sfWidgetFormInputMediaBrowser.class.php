@@ -51,7 +51,7 @@ class sfWidgetFormInputMediaBrowser extends sfWidgetForm
     $context = sfContext::getInstance();
     if(!isset($attributes['load_javascript']) || $attributes['load_javascript'] !== false)
     {
-      $context->getResponse()->addJavascript('/sfMediaBrowserPlugin/js/BrowserOpener.js');
+      $context->getResponse()->addJavascript('/sfMediaBrowserPlugin/js/WindowManager.js');
     }
     if(!isset($attributes['load_stylesheet']) || $attributes['load_stylesheet'] !== false)
     {
@@ -66,7 +66,7 @@ class sfWidgetFormInputMediaBrowser extends sfWidgetForm
     $tag = $this->renderTag('input', $attributes);
     $tag .= <<<EOF
     <script type="text/javascript">
-      BrowserOpener.addOpenBrowserListerner({target: '{$tag_id}', url: '{$url}'});
+      sfMediaBrowserWindowManager.addListerner({target: '{$tag_id}', url: '{$url}'});
     </script>
 EOF;
     return $tag;

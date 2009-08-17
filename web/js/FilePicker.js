@@ -1,5 +1,3 @@
-//try {$.fn}catch(e){alert('JQuery is not loaded !')}
-
 function sfMediaBrowserFilePicker(){}
 sfMediaBrowserFilePicker = {
   findFiles: function() {

@@ -38,7 +38,6 @@ class BasesfMediaBrowserActions extends sfActions
   public function executeSelect(sfWebRequest $request)
   {
     $this->setLayout(dirname(__FILE__).'/../templates/popupLayout');
-    $this->getResponse()->addJavascript('/sfMediaBrowserPlugin/js/filePicker.js');
     $this->setTemplate('index');
     $this->executeIndex($request);
   }
