@@ -1,3 +1,6 @@
+/**
+ * This file is used for sfMediaBrowser/indexSuccess
+ */
 window.onload = function() {
   var tags = document.getElementsByTagName('*');
   var tag;

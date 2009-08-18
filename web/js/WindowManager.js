@@ -1,3 +1,10 @@
+/**
+ * sfMediaBrowserWindowManager manages popup window opening and callbacks.
+ * It also managed tinyMCE and should manage any other js based plugin extension.
+ *
+ * @WARNING : tinymceCallback url is hardcoded !!!!!!
+ * @author: Vincent Agnano <vince@onanga.com>
+ */
 sfMediaBrowserWindowManager = {
   
   open: function(params) {
