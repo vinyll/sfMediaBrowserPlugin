@@ -73,7 +73,6 @@ and keep it updated.
 
 ## How to participate ? ##
 
-
   * By using
 
     - Send me what you think of this plugin, why you use it, or why you don't
@@ -102,10 +101,10 @@ and keep it updated.
 
 ## TODO ##
 
-  - add a sfValidatorMediaBrowser for verifying the data inserted is a valid file path under the
-      root_dir path
-  - add more icons definition
-  - add I18N __() and french translation
+  - test sfValidatorMediaBrowserFile
+  - add more icons definition (and gather file type definitions)
+  - add I18N __()
+  - add french translation
   - add a mime type recognition for icon match
   - add error/notice messages for deleting/creating file/folder
   - add thumbmail managment (sfThumbnamil dependency ?)
