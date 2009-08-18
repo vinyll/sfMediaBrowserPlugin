@@ -102,17 +102,15 @@ and keep it updated.
 ## TODO ##
 
   - test sfValidatorMediaBrowserFile
-  - add more icons definition (and gather file type definitions)
   - add I18N __()
   - add french translation
-  - add a mime type recognition for icon match
   - add error/notice messages for deleting/creating file/folder
   - add thumbmail managment (sfThumbnamil dependency ?)
   - add another browsing view with folder tree and files seperated
   - add file edition functionalities (move, rename)
   - add image edition functionalities (resize)
   - add permission managment (sfModularSecurity ?)
-  - add jquery dependency option (dom's filepicker. ajax view ? crop image ?)
+  - add a jquery optional version (dom's filepicker. ajax view ? crop image ?)
   - add sfDynamics packages managment
 
 
