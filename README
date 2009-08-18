@@ -7,12 +7,14 @@ It does not lay on database, is cross-platform, form file browser widget include
  even compatible as a tinymce file browser and easily extendable.
 
 Even though it it fully rewritten, this plugin was inspired from sfMediaLibraryPlugin
-in its layout design (not code) and easy functionalities.
+in its layout design and usability (not from its code).
 Considering these, it also aims theses goals :
 
-- keep what the sfMediaLibraryPlugin does.
+- make at least what the sfMediaLibraryPlugin does.
 - make it compatible with newest symfony stable version (1.2 as of today, 1.3 and 1.4 soon)
 and keep it updated.
+- make it JS unobstrusive.
+- always keep the basic version non library/framework dependant.
 - write it with less code, more extensible, more error managment.
 - add file editing capabilities.
 
@@ -56,6 +58,12 @@ and keep it updated.
 
       - Include this javascript in your template : "/sfMediaBrowserPlugin/js/WindowManager.js"
 
+      - insert this javascript :
+      {{{
+        sfMediaBrowserWindowManager.init(browser_url);
+      }}}
+      where browser_url is you url_for('sf_media_browser_select')
+
       - Setup your tinyMCE.init with this option :
       {{{
         ...
@@ -63,19 +71,53 @@ and keep it updated.
       }}}
 
 
+## How to participate ? ##
+
+
+  * By using
+
+    - Send me what you think of this plugin, why you use it, or why you don't
+    - Report bugs you've met
+
+
+  * By coding
+
+    - fix bugs you find
+    - kill the todo list below and send me patches
+    - code functionalities you would like to see natively
+    - send me your bug patches or new functionalities (zip and mail)
+
+    If you plan to send patch, read carefully how the plugin is coded, respect the symfony
+    code standards (including spaces, variable names, MVC architecture) as I will not include
+    any code that does not carefully respect them.
+
+
+## What this is not (and should never be) ##
+
+- A code mess
+- A media browser relying on a database
+- A non updated plugin
+
+
+
 ## TODO ##
 
-  - !!! remove the hardcoded url from WindowManager.js (come on guys, I needed to test it... !)
   - add a sfValidatorMediaBrowser for verifying the data inserted is a valid file path under the
       root_dir path
   - add more icons definition
   - add I18N __() and french translation
   - add a mime type recognition for icon match
+  - add error/notice messages for deleting/creating file/folder
   - add thumbmail managment (sfThumbnamil dependency ?)
   - add another browsing view with folder tree and files seperated
   - add file edition functionalities (move, rename)
   - add image edition functionalities (resize)
   - add permission managment (sfModularSecurity ?)
-  - add jquery dependency option
+  - add jquery dependency option (dom's filepicker. ajax view ? crop image ?)
   - add sfDynamics packages managment
-  
+
+
+## About ##
+
+The lead developer is Vincent Agnano <vince@onanga.com>.
+You may contact me at the email address here above.
