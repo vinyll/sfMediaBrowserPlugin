@@ -17,6 +17,8 @@
  */
 class sfWidgetFormInputMediaBrowser extends sfWidgetForm
 {
+
+  protected $context;
   /**
    * Constructor.
    *
@@ -48,27 +50,76 @@ class sfWidgetFormInputMediaBrowser extends sfWidgetForm
    */
   public function render($name, $value = null, $attributes = array(), $errors = array())
   {
-    $context = sfContext::getInstance();
+    $this->context = sfContext::getInstance();
+
+    $attributes = array_merge(array('type' => $this->getOption('type'), 'name' => $name, 'value' => $value), $attributes);
+    $attributes = $this->fixFormId($attributes);
+    $url = $this->context->getRouting()->generate('sf_media_browser_select');
+
+    $tag = $this->renderTag('input', $attributes);
+
+    $tag .= $this->includeView();
+    $tag .= $this->includeDelete();
+
+    // add
     if(!isset($attributes['load_javascript']) || $attributes['load_javascript'] !== false)
     {
-      $context->getResponse()->addJavascript('/sfMediaBrowserPlugin/js/WindowManager.js');
+      $tag .= $this->loadJavascript(array_merge($attributes, array('url' => $url)));
     }
     if(!isset($attributes['load_stylesheet']) || $attributes['load_stylesheet'] !== false)
     {
-      $context->getResponse()->addStylesheet('/sfMediaBrowserPlugin/css/form_widget.css');
+      $this->context->getResponse()->addStylesheet('/sfMediaBrowserPlugin/css/form_widget.css');
     }
-    $attributes['class'] = isset($attributes['class']) ? $attributes['class'].' sf_media_upload' : 'sf_media_upload';
-    $attributes = array_merge(array('type' => $this->getOption('type'), 'name' => $name, 'value' => $value), $attributes);
-    $attributes = $this->fixFormId($attributes);
-    $tag_id = $attributes['id'];
-    $url = $context->getRouting()->generate('sf_media_browser_select');
 
-    $tag = $this->renderTag('input', $attributes);
-    $tag .= <<<EOF
+
+    $tag = $this->wrapTag($tag);
+    return $tag;
+  }
+  
+
+  /**
+   * Insert dependant javascripts and include a <script> with sfMediaBrowserWindowManager.addListerner
+   * @return string HTML formatted js code
+   */
+  protected function loadJavascript(array $params)
+  {
+    $this->context->getResponse()->addJavascript('/sfMediaBrowserPlugin/js/WindowManager.js');
+    $this->context->getResponse()->addJavascript('/sfMediaBrowserPlugin/js/form_widget.js');
+    return <<<EOF
     <script type="text/javascript">
-      sfMediaBrowserWindowManager.addListerner({target: '{$tag_id}', url: '{$url}'});
+      sfMediaBrowserWindowManager.addListerner({target: '{$params['id']}', url: '{$params['url']}'});
     </script>
 EOF;
+  }
+
+
+  /**
+   * Includes a delete tag
+   * @return string HTML formatted span class="delete"
+   */
+  protected function includeDelete()
+  {
+    $tag = '<a class="delete">delete</a>';
     return $tag;
+  }
+
+  /**
+   * Includes a view tag
+   * @return string HTML formatted span class="view"
+   */
+  protected function includeView()
+  {
+    $tag = '<a class="view">view</a>';
+    return $tag;
+  }
+
+  /**
+   * Wraps a tag within a <span class="sf_media_browser_input_file"></span>
+   * @param string $tag tag to wrap
+   * @return string HTML string
+   */
+  protected function wrapTag($tag)
+  {
+    return '<span class="sf_media_browser_input_file">'.$tag.'</span>';
   }
 }
