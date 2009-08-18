@@ -2,13 +2,13 @@
  * sfMediaBrowserFilePicker is a class that enables picking
  * a file in a "select" popup context in an unobstrusive way.
  * It exists as such for no dependency with any JS framework.
- * @TODO : this file relies on hardcoded ids and tags, it should be more
- * extensible that this.
  */
 function sfMediaBrowserFilePicker(){}
 sfMediaBrowserFilePicker = {
-  findFiles: function() {
-    var tags = document.getElementById('sf_media_browser_list').getElementsByTagName('li');
+  findFiles: function(container_id) {
+    if(container_id == null)
+      throw new Error('sfMediaBrowserFilePicker.findFiles(container_id) requires a string parameter that matches a document DOM id');
+    var tags = document.getElementById(container_id).getElementsByTagName('*');
     var li, as, a;
     for(var i=0; i<tags.length; ++i) {
       li = tags[i];
@@ -23,6 +23,8 @@ sfMediaBrowserFilePicker = {
     }
   },
   hasClass: function(element, class_name) {
+    if(!element.hasAttribute('class'))
+      return false;
     return element.getAttribute('class').indexOf(class_name) != -1;
   },
   callback: function(url) {
@@ -30,7 +32,3 @@ sfMediaBrowserFilePicker = {
     window_manager.callback(url);
   }
 };
-
-window.onload = function() {
-  sfMediaBrowserFilePicker.findFiles();
-}
