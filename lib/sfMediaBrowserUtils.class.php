@@ -1,6 +1,6 @@
 <?php
 
-class sfMediaBrowserUTils
+class sfMediaBrowserUtils
 {
   protected $type_extension = array(
     'document' => array('doc', 'xls', ''),

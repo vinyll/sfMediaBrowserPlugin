@@ -22,15 +22,15 @@ $t->is(U::getTypeFromExtension('pdf'), 'pdf');
 $t->is(U::getTypeFromExtension('unknown'), 'file');
 
 $t->diag('->getIconFromType()');
-$t->is(U::getIconFromType('image'), $icon_dir.'/img.png');
+$t->is(U::getIconFromType('image'), $icon_dir.'/image.png');
 $t->is(U::getIconFromType('document'), $icon_dir.'/doc.png');
 $t->is(U::getIconFromType('pdf'), $icon_dir.'/pdf.png');
 $t->is(U::getIconFromType('unknown'), $icon_dir.'/file.png');
 
 $t->diag('->getIconFromExtension()');
-$t->is(U::getIconFromExtension('png'), $icon_dir.'/img.png');
-$t->is(U::getIconFromExtension('jpeg'), $icon_dir.'/img.png');
-$t->is(U::getIconFromExtension('jpg'), $icon_dir.'/img.png');
+$t->is(U::getIconFromExtension('png'), $icon_dir.'/image.png');
+$t->is(U::getIconFromExtension('jpeg'), $icon_dir.'/image.png');
+$t->is(U::getIconFromExtension('jpg'), $icon_dir.'/image.png');
 $t->is(U::getIconFromExtension('doc'), $icon_dir.'/doc.png');
 $t->is(U::getIconFromExtension('xls'), $icon_dir.'/doc.png');
 $t->is(U::getIconFromExtension('pdf'), $icon_dir.'/pdf.png');

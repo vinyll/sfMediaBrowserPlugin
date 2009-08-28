@@ -1,6 +1,7 @@
 all:
   sf_media_browser:
-    root_dir:   uploads
+    root_dir:           uploads
+    enable_thumbnails:  true
 
 
     file_types:                           # define file_types is usefull for displaying icons in browser

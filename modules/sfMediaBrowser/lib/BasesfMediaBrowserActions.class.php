@@ -93,6 +93,33 @@ class BasesfMediaBrowserActions extends sfActions
   }
 
 
+  public function executeEdit(sfWebRequest $request)
+  {
+    $filename = urldecode($request->getParameter('file'));
+    $this->file = sfMediaBrowserUtils::getTypeFromExtension(sfMediaBrowserUtils::getExtensionFromFile($filename)) =='image'
+                ? new sfMediaBrowserImageObject($filename)
+                : new sfMediaBrowserFileObject($filename)
+                ;
+    $this->rename_form = new sfMediaBrowserFileRenameForm(array('new_name' => $this->file->getName(), 'current_name' => $this->file->getName()));
+  }
+
+
+  public function executeRename(sfWebRequest $request)
+  {
+    $type = $request->getParameter('type');
+    $form = new sfMediaBrowserFileRenameForm();
+    $form->bind($request->getParameter('rename'));
+    if($form->isValid())
+    {
+      $file = new sfMediaBrowserFileObject($form->getValue('directory').'/'.$form->getValue('current_name'));
+      rename($file->getSystemPath(), dirname($file->getSystemPath()).'/'.$form->getValue('new_name'));
+      $this->redirect($this->generateUrl('sf_media_browser_edit', array('file' => $form->getValue('new_name'))));
+    }
+    //$this->redirect($request->getReferer());
+
+  }
+
+
 # Protected
 
   protected function getDirectories($path)
