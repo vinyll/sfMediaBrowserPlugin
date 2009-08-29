@@ -79,10 +79,28 @@ class BasesfMediaBrowserActions extends sfActions
     if($form->isValid())
     {
       $file = $form->getValue('file');
+      if(sfConfig::get('app_sf_media_browser_thumbnails_enabled', false))
+      {
+        $this->generateThumbnail($file);
+      }
       $name = $file->getOriginalName();
       $file->save(sfConfig::get('sf_web_dir').'/'.sfConfig::get('app_sf_media_browser_root_dir').$upload['directory'].'/'.$name);
     }
     $this->redirect($request->getReferer());
+  }
+
+
+  protected function generateThumbnail($file)
+  {
+    $class_name = sfConfig::get('app_sf_media_browser_thumbnails_class', 'sfThumbnail');
+    if(!class_exists($class_name))
+    {
+      $exception = $class_name == 'sfThumbnail'
+                 ? "You should install sfThumbnailPlugin first."
+                 : sprintf('Cannot find class "%s". Make sure to configure "app_sf_media_browser_thumbnails_class" properly.', $class_name)
+                 ;
+      throw new sfPluginException($exception);
+    }
   }
 
 
