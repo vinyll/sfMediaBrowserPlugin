@@ -41,7 +41,7 @@
 
 <?php foreach($files as $file): ?>
   <li class="file">
-    <?php include_component('sfMediaBrowser', 'icon', array('path' => $path, 'file_name' => $file)) ?>
+    <?php include_component('sfMediaBrowser', 'icon', array('dir' => $real_dir, 'filename' => $file)) ?>
   </li>
 <?php endforeach ?>
 </ul>

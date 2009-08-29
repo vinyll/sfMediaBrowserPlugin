@@ -6,27 +6,51 @@
  * @package
  * @subpackage
  * @author      Vincent Agnano <vince@onanga.com>
+ *
+ * Note :
+ * - ***_path = system directory
+ * - ***_dir = browser directory
  */
 class BasesfMediaBrowserActions extends sfActions
 {
-  public function executeIndex(sfWebRequest $request)
+  public function preExecute()
   {
+    // symfony web path
+    $this->web_path = sfConfig::get('sf_web_dir');
+
     // Configured root dir
-    $root_dir = sfConfig::get('app_sf_media_browser_root_dir');
-    if(!is_dir($root_dir))
+    $this->root_dir = sfconfig::get('app_sf_media_browser_root_dir');
+
+    $this->root_path = $this->web_path.$this->root_dir;
+
+    if(!is_dir($this->root_path))
     {
-      throw new sfConfigurationException(sprintf('The root directory "%s" does not exists', $root_dir));
+      throw new sfConfigurationException(sprintf('The root directory "%s" does not exists', $this->root_path));
     }
+  }
 
+
+  public function executeIndex(sfWebRequest $request)
+  {    
     // Dir relative to root
-    $relative_dir = urldecode($request->getParameter('dir'));
+    $current_dir = urldecode($request->getParameter('dir'));
+    $relative_dir = substr($current_dir, 0, 1) == '/' ? $current_dir : '/'.$current_dir;
+    
 
-    $this->parent_dir = $this->getParentDir($relative_dir);
+    // browser dir relative to app_sf_media_browser_root_dir
     $this->relative_dir = $relative_dir;
-    $this->path = $root_dir.$relative_dir;
+    // real browser dir
+    $this->real_dir = sfConfig::get('app_sf_media_browser_root_dir').$current_dir;
+    // browser parent dir
+    $this->parent_dir = $this->getParentDir($relative_dir);
+    // system path for current dir
+    $this->path = $this->root_path.$relative_dir;
+    // list of sub-directories in current dir
     $this->dirs = $this->getDirectories($this->path);
+    // list of files in current dir
     $this->files = $this->getFiles($this->path);
     $this->current_route = $this->getContext()->getRouting()->getCurrentRouteName();
+    // @TODO : find a better way to retrieve current url parameters (any ?)
     $this->current_params = $_GET;
 
     // forms
@@ -106,7 +130,7 @@ class BasesfMediaBrowserActions extends sfActions
 
   public function executeDeleteFile(sfWebRequest $request)
   {
-    unlink(urldecode(sfConfig::get('sf_web_dir').$request->getParameter('file')));
+    unlink($this->web_path.'/'.urldecode($request->getParameter('file')));
     $this->redirect($request->getReferer());
   }
 

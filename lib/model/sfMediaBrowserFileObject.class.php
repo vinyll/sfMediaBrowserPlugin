@@ -28,17 +28,17 @@ class sfMediaBrowserFileObject
   /**
    *
    * @param string $file the file path from under web_root
-   * @param string $relative_dir The directory relative to web_root. default : app_sf_media_browser_root_dir
+   * @param string $dir The directory relative to web_root. default : app_sf_media_browser_root_dir
    */
-  public function __construct($file, $relative_dir = null)
+  public function __construct($file, $dir = null)
   {
     $this->file = $file;
     if(!$this->getName())
     {
       throw new sfException(sprintf('The file "%s" is not a valid file name.', $file));
     }
-    $this->root_dir = $relative_dir !== null
-                    ? $relative_dir
+    $this->root_dir = $dir !== null
+                    ? $dir
                     : sfConfig::get('app_sf_media_browser_root_dir')
                     ;
     if(!file_exists($this->getSystemPath()))

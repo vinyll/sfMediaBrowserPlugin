@@ -20,9 +20,9 @@ class sfMediaBrowserImageObject extends sfMediaBrowserFileObject
   protected $image_size;
 
   
-  public function __construct($file)
+  public function __construct($file, $dir = null)
   {
-    parent::__construct($file);
+    parent::__construct($file, $dir);
     if($this->getType() != 'image')
     {
       throw new sfException(sprintf('The file "%s" is not an image', $file));
