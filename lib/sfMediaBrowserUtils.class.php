@@ -39,6 +39,14 @@ class sfMediaBrowserUtils
     
   }
 
+  
+  static public function getNameFromFile($file)
+  {
+    $dot_position = strrpos($file, '.');
+    return $dot_position ? substr($file, 0, $dot_position) : $file;
+  }
+  
+  
   static public function getExtensionFromFile($file)
   {
     return strtolower(substr(strrchr($file, '.'), 1));

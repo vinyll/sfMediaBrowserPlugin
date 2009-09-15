@@ -31,7 +31,7 @@ class BasesfMediaBrowserActions extends sfActions
 
 
   public function executeIndex(sfWebRequest $request)
-  {    
+  {
     // Dir relative to root
     $current_dir = urldecode($request->getParameter('dir'));
     $relative_dir = substr($current_dir, 0, 1) == '/' ? $current_dir : '/'.$current_dir;
@@ -107,8 +107,10 @@ class BasesfMediaBrowserActions extends sfActions
       {
         $this->generateThumbnail($file);
       }
-      $name = $file->getOriginalName();
-      $file->save(sfConfig::get('sf_web_dir').'/'.sfConfig::get('app_sf_media_browser_root_dir').$upload['directory'].'/'.$name);
+      $name = sfMediaBrowserStringUtils::slugify(sfMediaBrowserUtils::getNameFromFile($file));
+      $ext = sfMediaBrowserUtils::getExtensionFromFile($file);
+      $full_name = $ext ? $name.'.'.$ext : $name;
+      $file->save(sfConfig::get('sf_web_dir').'/'.sfConfig::get('app_sf_media_browser_root_dir').$upload['directory'].'/'.$full_name);
     }
     $this->redirect($request->getReferer());
   }

@@ -7,7 +7,7 @@ require_once dirname(__FILE__).'/../../lib/sfMediaBrowserUtils.class.php';
 
 sfConfig::set('sf_plugins_dir', dirname(__FILE__).'/../../..');
 $icon_dir = '/sfMediaBrowserPlugin/images/icons';
-$t = new lime_test(18, new lime_output_color());
+$t = new lime_test(21, new lime_output_color());
 
 class U extends sfMediaBrowserUtils{}
 
@@ -35,3 +35,7 @@ $t->is(U::getIconFromExtension('doc'), $icon_dir.'/doc.png');
 $t->is(U::getIconFromExtension('xls'), $icon_dir.'/doc.png');
 $t->is(U::getIconFromExtension('pdf'), $icon_dir.'/pdf.png');
 $t->is(U::getIconFromExtension('unknown'), $icon_dir.'/file.png');
+
+$t->is(U::getExtensionFromFile('test.png'), 'png', '::getExtensionFromFile() retrieves file extension');
+$t->is(U::getNameFromFile('test.png'), 'test', '::getNameFromFile() retrieves file name without extension');
+$t->is(U::getNameFromFile('test-without-extension'), 'test-without-extension', '::getNameFromFile() retrieve full name if no extension');

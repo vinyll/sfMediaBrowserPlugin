@@ -24,10 +24,21 @@ class sfMediaBrowserDirectoryForm extends sfForm
       'name'      => new sfValidatorString(array('trim' => true)),
       'directory' => new sfValidatorString(array('required' => false)),
     ));
+    
+    $this->getValidatorSchema()->setPostValidator(
+      new sfValidatorCallback(array('callback' => array($this, 'postValidator')))
+    );
+  }
+  
+  public function postValidator($validator, $values)
+  {
+    $values['name'] = sfMediaBrowserStringUtils::slugify($values['name']);
+    return $values;
   }
 
   public function setParentDirectory($parent_dir)
   {
     $this->parent_dir = $parent_dir;
   }
+  
 }
