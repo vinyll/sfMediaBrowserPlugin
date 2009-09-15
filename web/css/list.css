@@ -34,6 +34,7 @@ ul#sf_media_browser_list li {
   background:   #EEE;
   border:       1px solid #999;
   text-align:   center;
+  background-color: #FFF;
 }
 ul#sf_media_browser_list a {
   display:  block;
