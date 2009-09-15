@@ -4,7 +4,7 @@
 }
 .sf_media_browser_input_file input {
   padding-right:  20px;
-  background:     transparent url('/sfMediaBrowserPlugin/images/icons-16/attach.png') no-repeat 100% 50%;
+  background:     transparent url('../images/icons-16/attach.png') no-repeat 100% 50%;
   float:          left;
 }
 
@@ -19,8 +19,8 @@
 }
 
 .sf_media_browser_input_file a.delete {
-  background:   transparent url('/sfMediaBrowserPlugin/images/icons-16/delete.png') no-repeat;
+  background:   transparent url('../images/icons-16/delete.png') no-repeat;
 }
 .sf_media_browser_input_file a.view {
-  background:   transparent url('/sfMediaBrowserPlugin/images/icons-16/view.png') no-repeat;
+  background:   transparent url('../images/icons-16/view.png') no-repeat;
 }

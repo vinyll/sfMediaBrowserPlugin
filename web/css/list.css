@@ -55,7 +55,7 @@ ul#sf_media_browser_list .name {
   text-indent:  -5000px;
   width:        16px;
   height:       16px;
-  background:   transparent url('/sfMediaBrowserPlugin/images/icons-16/trash.png')
+  background:   transparent url('../images/icons-16/trash.png')
 }
 
 #sf_media_browser_list .action span {
