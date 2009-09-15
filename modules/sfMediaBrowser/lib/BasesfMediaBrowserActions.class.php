@@ -75,7 +75,8 @@ class BasesfMediaBrowserActions extends sfActions
     {
       $real_path = realpath(sfConfig::get('sf_web_dir').'/'.sfConfig::get('app_sf_media_browser_root_dir').'/'.$form->getValue('directory'));
       $full_name = $real_path.'/'.$form->getValue('name');
-      $created = mkdir($full_name, 0777);
+      $created = mkdir($full_name);
+      chmod($full_name, 0777);
       $notice = $created
               ? sprintf('The directory "%s" was succesfully created', $form->getValue('name'))
               : 'Some error occured'
@@ -103,19 +104,24 @@ class BasesfMediaBrowserActions extends sfActions
     if($form->isValid())
     {
       $file = $form->getValue('file');
+      $filename = $file->getOriginalName();
       if(sfConfig::get('app_sf_media_browser_thumbnails_enabled', false))
       {
         $this->generateThumbnail($file);
       }
-      $name = sfMediaBrowserStringUtils::slugify(sfMediaBrowserUtils::getNameFromFile($file));
-      $ext = sfMediaBrowserUtils::getExtensionFromFile($file);
+      $name = sfMediaBrowserStringUtils::slugify(sfMediaBrowserUtils::getNameFromFile($filename));
+      $ext = sfMediaBrowserUtils::getExtensionFromFile($filename);
       $full_name = $ext ? $name.'.'.$ext : $name;
       $file->save(sfConfig::get('sf_web_dir').'/'.sfConfig::get('app_sf_media_browser_root_dir').$upload['directory'].'/'.$full_name);
     }
     $this->redirect($request->getReferer());
   }
 
-
+  
+  /**
+   * @TODO
+   * @param $file
+   */
   protected function generateThumbnail($file)
   {
     $class_name = sfConfig::get('app_sf_media_browser_thumbnails_class', 'sfThumbnail');
