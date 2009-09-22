@@ -1,26 +1,30 @@
 <?php use_stylesheet('/sfMediaBrowserPlugin/css/list.css') ?>
 <?php use_javascript('/sfMediaBrowserPlugin/js/index.js') ?>
+<?php use_helper('I18N') ?>
+<script type="text/javascript">
+  delete_msg = "<?php echo __('Are you sure you want to delete this item ?') ?>";
+</script>
 
 <div id="sf_media_browser_forms">
   <fieldset id="sf_media_browser_upload">
-    <legend>Upload a file</legend>
+    <legend><?php echo __('Upload a file') ?></legend>
     <form action="<?php echo url_for('sf_media_browser_file_create') ?>" method="post" enctype="multipart/form-data">
       <?php echo $upload_form ?>
-      <input type="submit" class="submit" value="Save" />
+      <input type="submit" class="submit" value="<?php echo __('Save') ?>" />
     </form>
   </fieldset>
 
   <fieldset id="sf_media_browser_mkdir">
-    <legend>Create a new directory</legend>
+    <legend><?php echo __('Create a new directory') ?></legend>
     <form action="<?php echo url_for('sf_media_browser_dir_create') ?>" method="post">
       <?php echo $dir_form ?>
-      <input type="submit" class="submit" value="Create" />
+      <input type="submit" class="submit" value="<?php echo __('Create') ?>" />
     </form>
   </fieldset>
   <div class="clear"></div>
 </div>
 
-<h2>Current dir : <?php echo $relative_dir ?></h2>
+<h2><?php echo __('Current dir') ?> : <?php echo $relative_dir ?></h2>
 
 
 <ul id="sf_media_browser_list">
