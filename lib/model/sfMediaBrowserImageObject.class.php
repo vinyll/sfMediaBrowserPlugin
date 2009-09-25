@@ -17,12 +17,14 @@
  */
 class sfMediaBrowserImageObject extends sfMediaBrowserFileObject
 {
-  protected $image_size;
+  protected $image_size,
+            $thumbnail = null
+            ;
 
   
-  public function __construct($file, $dir = null)
+  public function __construct($file, $dir = null, $dir_is_absolute = false)
   {
-    parent::__construct($file, $dir);
+    parent::__construct($file, $dir, $dir_is_absolute);
     if($this->getType() != 'image')
     {
       throw new sfException(sprintf('The file "%s" is not an image', $file));
@@ -55,5 +57,46 @@ class sfMediaBrowserImageObject extends sfMediaBrowserFileObject
     $image_size = $this->getImageSize();
     return $image_size[1];
   }
-
+  
+  
+  public function getThumbnail()
+  {
+    if(!$this->thumbnail)
+    {
+      $this->thumbnail = new self($this->getName(),
+                              $this->getRootDir().'/'.sfConfig::get('app_sf_media_browser_thumbnails_dir', '.thumbnails')
+                         );
+    }
+    return $this->thumbnail;
+  }
+  
+  
+  public function getIcon()
+  {
+    $thumbnail = $this->getThumbnail();
+    if($thumbnail)
+    {
+      return $thumbnail->getWebPath();
+    }
+    return parent::getIcon();
+  }
+  
+  
+  
+  public function delete()
+  {
+    // try to delete the thumbnail if exists
+    try
+    {
+      $thumbnail = $this->getThumbnail();
+      if($thumbnail)
+      {
+        $thumbnail->delete();
+      }
+    }
+    catch(sfException $e){}
+    
+    // delete current file
+    parent::delete();
+  }
 }
