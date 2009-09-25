@@ -24,6 +24,23 @@
   <div class="clear"></div>
 </div>
 
+
+<?php if($sf_user->hasFlash('error')): ?>
+  <div class="error">
+  <?php if($sf_user->getFlash('error') == 'directory.delete'): ?>
+    <?php echo __('The directory could not be deleted.') ?>
+  <?php endif ?>
+  </div>
+<?php elseif($sf_user->hasFlash('notice')): ?>
+  <div class="notice">
+  <?php if($sf_user->getFlash('notice') == 'directory.delete'): ?>
+    <?php echo __('The directory was succesfully deleted.') ?>
+  <?php endif ?>
+  </div>
+<?php endif ?>
+
+
+
 <h2><?php echo __('Current dir') ?> : <?php echo $relative_dir ?></h2>
 
 

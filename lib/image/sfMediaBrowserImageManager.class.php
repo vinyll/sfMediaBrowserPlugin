@@ -5,7 +5,6 @@ class sfMediaBrowserImageManager
   
   public function __construct($manager_class, $source_file)
   {
-    //print $source_file; exit;
     if(!class_exists($manager_class))
     {
       throw new sfConfigurationException(sprintf('sfMediaBrowserImageManager cannot instanciate not found class "%s"', $manager_class));

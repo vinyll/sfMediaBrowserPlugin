@@ -100,4 +100,20 @@ class sfMediaBrowserUtils
   {
     return '/sfMediaBrowserPlugin/images/icons';
   }
+  
+  
+  static public function deleteRecursive($path)
+  {
+    $files = sfFinder::type('file')->in($path);
+    foreach($files as $file)
+    {
+      unlink($file);
+    }
+    $dirs = array_reverse(sfFinder::type('dir')->in($path));
+    foreach($dirs as $dir)
+    {
+      rmdir($dir);
+    }
+    return @rmdir($path);
+  }
 }

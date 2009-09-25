@@ -90,7 +90,8 @@ class BasesfMediaBrowserActions extends sfActions
 
   public function executeDeleteDirectory(sfWebRequest $request)
   {
-    rmdir(urldecode(sfConfig::get('sf_web_dir').'/'.sfConfig::get('app_sf_media_browser_root_dir').$request->getParameter('directory')));
+    $deleted = sfMediaBrowserUtils::deleteRecursive(urldecode(sfConfig::get('sf_web_dir').'/'.sfConfig::get('app_sf_media_browser_root_dir').$request->getParameter('directory')));
+    $deleted ? $this->getUser()->setFlash('notice', 'directory.delete') : $this->getUser()->setFlash('error', 'directory.delete');
     $this->redirect($request->getReferer());
   }
 
@@ -110,7 +111,7 @@ class BasesfMediaBrowserActions extends sfActions
       $fullname = $ext ? $name.'.'.$ext : $name;
       $destination_dir = sfConfig::get('sf_web_dir').'/'.sfConfig::get('app_sf_media_browser_root_dir').$upload['directory'];
       // thumbnail
-      if(sfConfig::get('app_sf_media_browser_thumbnails_enabled', false))
+      if(sfConfig::get('app_sf_media_browser_thumbnails_enabled', false) && sfMediaBrowserUtils::getTypeFromExtension($ext) == 'image')
       {
         $this->generateThumbnail($file->getTempName(), $fullname, $destination_dir);
       }
