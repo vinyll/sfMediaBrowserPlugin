@@ -7,7 +7,7 @@ require_once dirname(__FILE__).'/../../lib/sfMediaBrowserUtils.class.php';
 
 sfConfig::set('sf_plugins_dir', dirname(__FILE__).'/../../..');
 $icon_dir = '/sfMediaBrowserPlugin/images/icons';
-$t = new lime_test(21, new lime_output_color());
+$t = new lime_test(23, new lime_output_color());
 
 class U extends sfMediaBrowserUtils{}
 
@@ -39,3 +39,17 @@ $t->is(U::getIconFromExtension('unknown'), $icon_dir.'/file.png');
 $t->is(U::getExtensionFromFile('test.png'), 'png', '::getExtensionFromFile() retrieves file extension');
 $t->is(U::getNameFromFile('test.png'), 'test', '::getNameFromFile() retrieves file name without extension');
 $t->is(U::getNameFromFile('test-without-extension'), 'test-without-extension', '::getNameFromFile() retrieve full name if no extension');
+
+
+$t->diag('->deleteRecursive()');
+$root_dir = dirname(__FILE__).'/../../../../web/uploads/deleteRecursive';
+$deep_dir = $root_dir.'/deleteRecursive1/deleteRecursive11';
+mkdir($deep_dir, 0777, true);
+mkdir($root_dir.'/deleteRecursive2');
+touch($deep_dir.'/text.txt');
+touch($deep_dir.'/text2.txt');
+$t->is(U::deleteRecursive($root_dir), true, 'return true if task was supposed to be done');
+$t->is(file_exists($root_dir), false, 'successfully deleted the selected directory and its subfolders');
+
+
+

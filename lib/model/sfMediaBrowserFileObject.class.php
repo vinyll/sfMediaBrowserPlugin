@@ -32,6 +32,13 @@ class sfMediaBrowserFileObject
    */
   public function __construct($file, $dir = null)
   {
+    if(strstr($file, '/'))
+    {
+      $dir = $dir.dirname($file);
+      $file = substr($file, strrpos($file, '/'));
+    }
+        
+    
     $this->file = $file;
     if(!$this->getName())
     {
@@ -99,7 +106,7 @@ class sfMediaBrowserFileObject
 
   public function getSystemPath()
   {
-    return sfConfig::get('sf_web_dir').$this->getRootDir().$this->getFile();
+    return $this->cleanFolder(sfConfig::get('sf_web_dir').$this->getRootDir().$this->getFile());
   }
 
 
@@ -144,8 +151,15 @@ class sfMediaBrowserFileObject
 
   protected function cleanFolder($folder)
   {
-    $cleaned = substr($folder, 0, 1) != '/' ? '/'.$folder : $folder;
+    $cleaned = strtr($folder, '//', '/');
+    $cleaned = substr($cleaned, 0, 1) != '/' ? '/'.$cleaned : $cleaned;
     $cleaned = substr($cleaned, -1, 1) == '/' ? substr($cleaned, 0, -1) : $cleaned;
     return $cleaned;
+  }
+  
+  
+  public function delete()
+  {
+    unlink($this->getSystemPath());
   }
 }

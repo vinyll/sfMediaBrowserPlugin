@@ -89,7 +89,8 @@ class BasesfMediaBrowserActions extends sfActions
 
   public function executeDeleteDirectory(sfWebRequest $request)
   {
-    rmdir(urldecode(sfConfig::get('sf_web_dir').'/'.sfConfig::get('app_sf_media_browser_root_dir').$request->getParameter('directory')));
+    $deleted = sfMediaBrowserUtils::deleteRecursive(urldecode(sfConfig::get('sf_web_dir').'/'.sfConfig::get('app_sf_media_browser_root_dir').$request->getParameter('directory')));
+    $deleted ? $this->getUser()->setFlash('notice', 'directory.delete') : $this->getUser()->setFlash('error', 'directory.delete');
     $this->redirect($request->getReferer());
   }
 
@@ -104,14 +105,16 @@ class BasesfMediaBrowserActions extends sfActions
     {
       $file = $form->getValue('file');
       $filename = $file->getOriginalName();
-      if(sfConfig::get('app_sf_media_browser_thumbnails_enabled', false))
-      {
-        $this->generateThumbnail($file);
-      }
       $name = sfMediaBrowserStringUtils::slugify(sfMediaBrowserUtils::getNameFromFile($filename));
       $ext = sfMediaBrowserUtils::getExtensionFromFile($filename);
-      $full_name = $ext ? $name.'.'.$ext : $name;
-      $file->save(sfConfig::get('sf_web_dir').'/'.sfConfig::get('app_sf_media_browser_root_dir').$upload['directory'].'/'.$full_name);
+      $fullname = $ext ? $name.'.'.$ext : $name;
+      $destination_dir = sfConfig::get('sf_web_dir').'/'.sfConfig::get('app_sf_media_browser_root_dir').$upload['directory'];
+      // thumbnail
+      if(sfConfig::get('app_sf_media_browser_thumbnails_enabled', false) && sfMediaBrowserUtils::getTypeFromExtension($ext) == 'image')
+      {
+        $this->generateThumbnail($file->getTempName(), $fullname, $destination_dir);
+      }
+      $file->save($destination_dir.'/'.$fullname);
     }
     $this->redirect($request->getReferer());
   }
@@ -121,34 +124,43 @@ class BasesfMediaBrowserActions extends sfActions
    * @TODO
    * @param $file
    */
-  protected function generateThumbnail($file)
+  protected function generateThumbnail($source_file, $destination_name, $destination_dir)
   {
-    $class_name = sfConfig::get('app_sf_media_browser_thumbnails_class', 'sfThumbnail');
-    if(!class_exists($class_name))
+    $class_name = sfConfig::get('app_sf_media_browser_image_manager_class');
+    $manager = new sfMediaBrowserImageManager($class_name, $source_file);
+    $manager->resize(sfConfig::get('app_sf_media_browser_thumbnails_max_width', 80),
+                     sfConfig::get('app_sf_media_browser_thumbnails_max_height', 80));
+    $destination_dir = $destination_dir.'/'.sfConfig::get('app_sf_media_browser_thumbnails_dir', '.uploads');
+    if(!file_exists($destination_dir))
     {
-      $exception = $class_name == 'sfThumbnail'
-                 ? "You should install sfThumbnailPlugin first."
-                 : sprintf('Cannot find class "%s". Make sure to configure "app_sf_media_browser_thumbnails_class" properly.', $class_name)
-                 ;
-      throw new sfPluginException($exception);
+      mkdir($destination_dir);
+      chmod($destination_dir, 0777);
     }
+    return $manager->save($destination_dir.'/'.$destination_name);
   }
 
 
   public function executeDeleteFile(sfWebRequest $request)
   {
-    unlink($this->web_path.'/'.urldecode($request->getParameter('file')));
+    $file = $this->createFileObject(urldecode($request->getParameter('file')));
+    $file->delete();
     $this->redirect($request->getReferer());
+  }
+  
+  
+  protected function createFileObject($file)
+  {
+    $class = sfMediaBrowserUtils::getTypeFromExtension(sfMediaBrowserUtils::getExtensionFromFile($file)) =='image'
+            ? 'sfMediaBrowserImageObject'
+            : 'sfMediaBrowserFileObject'
+            ;
+    return new $class($file);
   }
 
 
   public function executeEdit(sfWebRequest $request)
   {
-    $filename = urldecode($request->getParameter('file'));
-    $this->file = sfMediaBrowserUtils::getTypeFromExtension(sfMediaBrowserUtils::getExtensionFromFile($filename)) =='image'
-                ? new sfMediaBrowserImageObject($filename)
-                : new sfMediaBrowserFileObject($filename)
-                ;
+    $this->file = $this->createFileObject(urldecode($request->getParameter('file')));
     $this->rename_form = new sfMediaBrowserFileRenameForm(array('new_name' => $this->file->getName(), 'current_name' => $this->file->getName()));
   }
 
