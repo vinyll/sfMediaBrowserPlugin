@@ -50,8 +50,8 @@ class BasesfMediaBrowserActions extends sfActions
     $this->files = $this->getFiles($this->path);
     $this->current_route = $this->getContext()->getRouting()->getCurrentRouteName();
     // @TODO : find a better way to retrieve current url parameters (any ?)
-    $this->current_params = $_GET;
-
+    $this->current_params = $request->getGetParameters();
+    
     // forms
     $this->upload_form = new sfMediaBrowserUploadForm(array('directory' => $relative_dir));
     $this->dir_form = new sfMediaBrowserDirectoryForm(array('directory' => $relative_dir));
