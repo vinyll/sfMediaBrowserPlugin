@@ -3,9 +3,8 @@
 /**
  *
  *
- * @package
- * @subpackage
- * @author      Vincent Agnano <vince@onanga.com>
+ * @package     sfMediaBrowser
+ * @author      Vincent Agnano <vincet.agnano@particul.es>
  *
  * Note :
  * - ***_path = system directory

@@ -5,10 +5,9 @@ require_once dirname(__FILE__).'/../lib/BasesfMediaBrowserActions.class.php';
 /**
  *
  *
- * @package
- * @subpackage
- * @author      Vincent Agnano <vince@onanga.com>
+ * @package     sfMediaBrowser
+ * @author      Vincent Agnano <vincent.agnano@particul.es>
  */
 class sfMediaBrowserActions extends BasesfMediaBrowserActions
-{  
+{
 }

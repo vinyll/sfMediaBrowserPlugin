@@ -3,9 +3,8 @@
 /**
  *
  *
- * @package
- * @subpackage
- * @author      Vincent Agnano <vince@onanga.com>
+ * @package     sfMediaBrowser
+ * @author      Vincent Agnano <vincent.agnano@particul.es>
  */
 class BasesfMediaBrowserComponents extends sfComponents
 {

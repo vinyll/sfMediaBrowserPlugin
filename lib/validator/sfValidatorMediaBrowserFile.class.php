@@ -1,7 +1,9 @@
 <?php
 
 /*
- * (c) Vincent Agnano <vince@onanga.com>
+ * This file is part of the sfMediaBrowser package.
+ *
+ * (c) 2009 Vincent Agnano <vincent.agnano@particul.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +14,7 @@
  *
  * @package    sfMediaBrowserPlugin
  * @subpackage validator
- * @author     Fabien Potencier <vince@onanga.com>
+ * @author     Vincent Agnano <vincent.agnano@particul.es>
  */
 class sfValidatorMediaBrowserFile extends sfValidatorBase
 {
@@ -34,7 +36,7 @@ class sfValidatorMediaBrowserFile extends sfValidatorBase
    */
   protected function configure($options = array(), $messages = array())
   {
-    $this->setMessage('invalid', '"%file%" is not a valid file path.');    
+    $this->setMessage('invalid', '"%file%" is not a valid file path.');
     $this->addOption('type');
     $this->addMessage('type', 'the file must be a "%type%"');
   }

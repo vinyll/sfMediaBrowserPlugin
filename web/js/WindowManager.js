@@ -3,7 +3,7 @@
  * It also managed tinyMCE and should manage any other js based plugin extension.
  *
  * @WARNING : tinymceCallback url is hardcoded !!!!!!
- * @author: Vincent Agnano <vince@onanga.com>
+ * @author: Vincent Agnano <vincent.agnano@particul.es>
  */
 sfMediaBrowserWindowManager = {
 

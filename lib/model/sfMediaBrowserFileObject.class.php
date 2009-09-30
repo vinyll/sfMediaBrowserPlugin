@@ -2,7 +2,7 @@
 
 /*
  * This file is part of the sfMediaBrowserPlugin package.
- * (c) Vincent Agnano <vince@onanga.com>
+ * (c) Vincent Agnano <vincent.agnano@particul.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  *
  * @package    sfMediaBrowser
  * @subpackage model
- * @author     Vincent Agnano <vince@onanga.com>
+ * @author     Vincent Agnano <vincent.agnano@particul.es>
  */
 class sfMediaBrowserFileObject
 {

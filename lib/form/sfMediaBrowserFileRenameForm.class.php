@@ -5,7 +5,7 @@
  *
  * @package     sfMediaBrowser
  * @subpackage  form
- * @author      Vincent Agnano <vince@onanga.com>
+ * @author      Vincent Agnano <vincent.agnano@particul.es>
  */
 class sfMediaBrowserFileRenameForm extends sfForm
 {

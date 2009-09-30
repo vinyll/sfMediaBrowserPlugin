@@ -1,4 +1,4 @@
-# sfMediaBrowserPlugin (for symfony 1.2 and 1.1) #
+# sfMediaBrowserPlugin (for symfony 1.3, 1.2 and I assume 1.1) #
 
 The `sfMediaBrowserPlugin` is a symfony plugin that provides file managment
 by uploading, editing and browsing files and directories.
@@ -116,5 +116,5 @@ and keep it updated.
 
 ## About ##
 
-The lead developer is Vincent Agnano <vince@onanga.com>.
+The lead developer is Vincent Agnano <vincent.agnano@particul.es>.
 You may contact me at the email address here above.
