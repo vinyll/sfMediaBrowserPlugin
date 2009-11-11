@@ -76,12 +76,7 @@ class BasesfMediaBrowserActions extends sfActions
       $full_name = $real_path.'/'.$form->getValue('name');
       $created = mkdir($full_name);
       chmod($full_name, 0777);
-      $notice = $created
-              ? sprintf('The directory "%s" was succesfully created', $form->getValue('name'))
-              : 'Some error occured'
-              ;
-        $this->getUser()->setFlash('notice', $notice);
-      
+      $this->getUser()->setFlash($created ? 'notice' : 'error', 'directory.create');
     }
     $this->redirect($request->getReferer());
   }
@@ -90,7 +85,7 @@ class BasesfMediaBrowserActions extends sfActions
   public function executeDeleteDirectory(sfWebRequest $request)
   {
     $deleted = sfMediaBrowserUtils::deleteRecursive(urldecode(sfConfig::get('sf_web_dir').'/'.sfConfig::get('app_sf_media_browser_root_dir').$request->getParameter('directory')));
-    $deleted ? $this->getUser()->setFlash('notice', 'directory.delete') : $this->getUser()->setFlash('error', 'directory.delete');
+    $this->getUser()->setFlash($deleted ? 'notice' : 'error', 'directory.delete');
     $this->redirect($request->getReferer());
   }
 
@@ -114,7 +109,12 @@ class BasesfMediaBrowserActions extends sfActions
       {
         $this->generateThumbnail($file->getTempName(), $fullname, $destination_dir);
       }
+      $this->getUser()->setFlash('notice', 'file.create');
       $file->save($destination_dir.'/'.$fullname);
+    }
+    else
+    {
+      $this->getUser()->setFlash('error', 'file.create');
     }
     $this->redirect($request->getReferer());
   }
@@ -144,6 +144,7 @@ class BasesfMediaBrowserActions extends sfActions
   {
     $file = $this->createFileObject(urldecode($request->getParameter('file')));
     $file->delete();
+    $this->getUser()->setFlash('notice', 'file.delete');
     $this->redirect($request->getReferer());
   }
   

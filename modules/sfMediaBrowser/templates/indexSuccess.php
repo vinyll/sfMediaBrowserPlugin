@@ -29,12 +29,20 @@
   <div class="error">
   <?php if($sf_user->getFlash('error') == 'directory.delete'): ?>
     <?php echo __('The directory could not be deleted.') ?>
+  <?php elseif($sf_user->getFlash('error') == 'file.create'): ?>
+    <?php echo __('The file could not be uploaded.') ?>
   <?php endif ?>
   </div>
 <?php elseif($sf_user->hasFlash('notice')): ?>
   <div class="notice">
-  <?php if($sf_user->getFlash('notice') == 'directory.delete'): ?>
-    <?php echo __('The directory was succesfully deleted.') ?>
+  <?php if($sf_user->getFlash('notice') == 'directory.create'): ?>
+    <?php echo __('The directory was successfully created.') ?>
+  <?php elseif($sf_user->getFlash('notice') == 'directory.delete'): ?>
+    <?php echo __('The directory was successfully deleted.') ?>
+  <?php elseif($sf_user->getFlash('notice') == 'file.create'): ?>
+    <?php echo __('The file was successfully uploaded.') ?>
+  <?php elseif($sf_user->getFlash('notice') == 'file.delete'): ?>
+    <?php echo __('The file was succesfully deleted.') ?>
   <?php endif ?>
   </div>
 <?php endif ?>
@@ -56,7 +64,7 @@
   <li class="folder">
     <?php echo link_to(image_tag('/sfMediaBrowserPlugin/images/icons/folder.png'), $current_route, array_merge($sf_data->getRaw('current_params'), array('dir' => urlencode($relative_dir.'/'.$dir)))) ?>
     <div class="name"><?php echo $dir ?></div>
-    <div class="action"><?php echo link_to('delete', 'sf_media_browser_dir_delete', array('sf_method' => 'delete', 'directory' => urlencode($relative_dir.'/'.$dir)), array('class' => 'delete', 'title' => sprintf('Delete folder "%s"', $dir))) ?></div>
+    <div class="action"><?php echo link_to('delete', 'sf_media_browser_dir_delete', array('sf_method' => 'delete', 'directory' => urlencode($relative_dir.'/'.$dir)), array('class' => 'delete', 'title' => sprintf(__('Delete folder "%s"'), $dir))) ?></div>
   </li>
 <?php endforeach ?>
 

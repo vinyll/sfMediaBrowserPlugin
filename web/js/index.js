@@ -9,7 +9,7 @@ window.onload = function() {
     if(tag.getAttribute('class') && tag.getAttribute('class').indexOf('delete') != -1)
     {
       tag.onclick = function() {
-        return window.confirm("Are you sure you want to delete this item ?");
+        return window.confirm(delete_msg);
       }
     }
   }

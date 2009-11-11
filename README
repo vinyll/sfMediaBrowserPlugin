@@ -100,15 +100,13 @@ and keep it updated.
 
 
 ## TODO ##
-
+  
+  - improve security and lock parent root folder browsing
   - test sfValidatorMediaBrowserFile
-  - add I18N __()
-  - add french translation
-  - add error/notice messages for deleting/creating file/folder
-  - add thumbmail managment (sfThumbnamil dependency ?)
+  - test thumbmail managment (sfImageTransform dependency)
   - add another browsing view with folder tree and files seperated
   - add file edition functionalities (move, rename)
-  - add image edition functionalities (resize)
+  - add image edition functionalities (resize and maybe rotate)
   - add permission managment (sfModularSecurity ?)
   - add a jquery optional version (dom's filepicker. ajax view ? crop image ?)
   - add sfDynamics packages managment

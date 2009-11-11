@@ -68,3 +68,15 @@ ul#sf_media_browser_list .name {
 .clear {
   clear: both;
 }
+
+.notice, .error {
+  border:      1px solid #DDDDDD;
+  margin:      4px 0;
+  padding:     4px 30px;
+}
+.notice {
+	background:  #FFFFCC;
+}
+.error {
+  background:  #FFCCCC;
+}
