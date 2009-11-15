@@ -17,19 +17,20 @@
  */
 class sfMediaBrowserImageObject extends sfMediaBrowserFileObject
 {
-  protected $image_size,
+  protected $dimensions = null,
             $thumbnail = null
             ;
 
   
-  public function __construct($file, $dir = null, $dir_is_absolute = false)
+  public function __construct($file)
   {
-    parent::__construct($file, $dir, $dir_is_absolute);
+    parent::__construct($file);
     if($this->getType() != 'image')
     {
       throw new sfException(sprintf('The file "%s" is not an image', $file));
     }
   }
+  
 
   public function isImage()
   {
@@ -37,25 +38,25 @@ class sfMediaBrowserImageObject extends sfMediaBrowserFileObject
   }
   
   
-  public function getImageSize()
+  public function getDimensions()
   {
-    if(!$this->image_size)
+    if(!$this->dimensions)
     {
-      $this->image_size = getimagesize($this->getSystemPath());
+      $this->dimensions = getimagesize($this->getPath());
     }
-    return $this->image_size;
+    return $this->dimensions;
   }
 
   public function getWidth()
   {
-    $image_size = $this->getImageSize();
-    return $image_size[0];
+    $dimensions = $this->getDimensions();
+    return $dimensions[0];
   }
 
   public function getHeight()
   {
-    $image_size = $this->getImageSize();
-    return $image_size[1];
+    $dimensions = $this->getDimensions();
+    return $dimensions[1];
   }
   
   
@@ -63,11 +64,12 @@ class sfMediaBrowserImageObject extends sfMediaBrowserFileObject
   {
     if(!$this->thumbnail)
     {
-      $this->thumbnail = new self($this->getName(),
-                              $this->getRootDir().'/'.sfConfig::get('app_sf_media_browser_thumbnails_dir', '.thumbnails')
-                         );
+      $this->thumbnail = new self($this->getUrlDir().'/'.sfconfig::get('app_sf_media_browser_thumbnails_dir').'/'.$this->getName());
     }
-    return $this->thumbnail;
+    return file_exists($this->thumbnail->getPath())
+           ? $this->thumbnail
+           : null
+           ;
   }
   
   
@@ -76,7 +78,7 @@ class sfMediaBrowserImageObject extends sfMediaBrowserFileObject
     $thumbnail = $this->getThumbnail();
     if($thumbnail)
     {
-      return $thumbnail->getWebPath();
+      return $thumbnail->getUrl();
     }
     return parent::getIcon();
   }

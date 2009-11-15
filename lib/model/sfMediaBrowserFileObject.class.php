@@ -9,7 +9,7 @@
  */
 
 /**
- * sfWidgetFormInput represents an HTML input file browser tag.
+ * sfMediaBrowserFileObject represents a file.
  *
  * @package    sfMediaBrowser
  * @subpackage model
@@ -17,47 +17,36 @@
  */
 class sfMediaBrowserFileObject
 {
-  protected $file,
+  protected $file_url,
+            $root_path,
             $name,
             $type,
-            $extension,
             $size,
-            $icon,
-            $root_dir;
+            $icon
+            ;
 
   /**
    *
    * @param string $file the file path from under web_root
-   * @param string $dir The directory relative to web_root. default : app_sf_media_browser_root_dir
    */
-  public function __construct($file, $dir = null)
+  public function __construct($file)
   {
-    if(strstr($file, '/'))
-    {
-      $dir = $dir.dirname($file);
-      $file = substr($file, strrpos($file, '/'));
-    }
-        
-    
-    $this->file = $file;
-    if(!$this->getName())
-    {
-      throw new sfException(sprintf('The file "%s" is not a valid file name.', $file));
-    }
-    $this->root_dir = $dir !== null
-                    ? $dir
-                    : sfConfig::get('app_sf_media_browser_root_dir')
-                    ;
-    if(!file_exists($this->getSystemPath()))
-    {
-      throw new sfException(sprintf('The file "%s" does not exist.', $this->getSystemPath()));
-    }
+    $this->file_url = $file;
+    $this->root_path = realpath(sfConfig::get('sf_web_dir'));
   }
+  
 
   public function __toString()
   {
     return $this->getName();
   }
+  
+  
+  public function exists()
+  {
+    return file_exists($this->getPath());
+  }
+  
 
   public function getType()
   {
@@ -86,53 +75,50 @@ class sfMediaBrowserFileObject
     }
     return $this->icon;
   }
-
-
-  public function getFile()
-  {
-    return $this->cleanFolder($this->file);
-  }
   
 
   public function getExtension()
   {
-    if(!$this->extension)
-    {
-      $this->extension = sfMediaBrowserUtils::getExtensionFromFile($this->file);
-    }
-    return $this->extension;
+    return pathinfo($this->getUrl(), PATHINFO_EXTENSION);
   }
 
 
-  public function getSystemPath()
+  public function getPath()
   {
-    return $this->cleanFolder(sfConfig::get('sf_web_dir').$this->getRootDir().$this->getFile());
+    return realpath($this->root_path.'/'.$this->getUrl());
+  }
+  
+  
+  public function getUrl()
+  {
+    return $this->file_url;
+  }
+  
+  
+  public function getUrlDir()
+  {
+    return pathinfo($this->getUrl(), PATHINFO_DIRNAME);
   }
 
 
-  public function getRootDir()
+  public function getRootPath()
   {
-    return $this->cleanFolder($this->root_dir);
-  }
-
-
-  public function getWebPath()
-  {
-    return $this->getRootDir().$this->getFile();
+    return realpath($this->root_path);
   }
 
   
-  public function getName($without_extension = false)
+  public function getName($with_extension = true)
   {
     if(!$this->name)
     {
-      $this->name = substr($this->cleanFolder($this->file), 1);
+      $this->name = pathinfo($this->file_url, PATHINFO_FILENAME);
     }
-    return $without_extension === false
-			      ? $this->name
-			      : substr($this->name, 0, strrpos($this->name, '.'))
+    return $with_extension && $this->getExtension()
+			      ? $this->name.'.'.$this->getExtension()
+			      : $this->name
 			      ;
   }
+  
   
   /**
    * Get a filesize
@@ -143,7 +129,7 @@ class sfMediaBrowserFileObject
   {
     if(!$this->size)
     {
-      $this->size = filesize($this->getSystemPath());
+      $this->size = filesize($this->getPath());
     }
     return $round >= 1 ? round($this->size/$round) : $this->size;
   }
@@ -160,6 +146,10 @@ class sfMediaBrowserFileObject
   
   public function delete()
   {
-    unlink($this->getSystemPath());
+    if($this->exists())
+    {
+      return unlink($this->getPath());
+    }
+    return false;
   }
 }

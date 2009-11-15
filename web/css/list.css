@@ -43,6 +43,17 @@ ul#sf_media_browser_list img {
   border:     none;
   margin:     10px 0 10px 0;
 }
+
+ul#sf_media_browser_list .folder a, ul#sf_media_browser_list .icon a {
+  width:      100px;
+  height:     85px;
+  margin:     auto;
+}
+ul#sf_media_browser_list .icon img {
+  max-width:  80px;
+  max-height: 80px;
+}
+
 ul#sf_media_browser_list .name {
   font-size:    .8em;
   background:   #999;

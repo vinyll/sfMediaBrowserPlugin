@@ -10,11 +10,11 @@ class BasesfMediaBrowserComponents extends sfComponents
 {
   public function executeIcon(sfWebRequest $request)
   {
-    $class = sfMediaBrowserUtils::getTypeFromExtension(sfMediaBrowserUtils::getExtensionFromFile($this->filename)) == 'image'
+    $class = sfMediaBrowserUtils::getTypeFromExtension(sfMediaBrowserUtils::getExtensionFromFile($this->file_url)) == 'image'
            ? 'sfMediaBrowserImageObject'
            : 'sfMediaBrowserFileObject'
            ;
-    $this->file = new $class($this->filename, $this->dir);
+    $this->file = new $class($this->file_url);
   }
   
 }

@@ -49,7 +49,7 @@
 
 
 
-<h2><?php echo __('Current dir') ?> : <?php echo $relative_dir ?></h2>
+<h2><?php echo __('Current dir') ?> : <?php echo $relative_dir?$relative_dir:'/' ?></h2>
 
 
 <ul id="sf_media_browser_list">
@@ -62,7 +62,7 @@
 
 <?php foreach($dirs as $dir): ?>
   <li class="folder">
-    <?php echo link_to(image_tag('/sfMediaBrowserPlugin/images/icons/folder.png'), $current_route, array_merge($sf_data->getRaw('current_params'), array('dir' => urlencode($relative_dir.'/'.$dir)))) ?>
+    <?php echo link_to(image_tag('/sfMediaBrowserPlugin/images/icons/folder.png'), $current_route, array_merge($sf_data->getRaw('current_params'), array('dir' => urlencode($relative_dir.'/'.pathinfo($dir, PATHINFO_BASENAME))))) ?>
     <div class="name"><?php echo $dir ?></div>
     <div class="action"><?php echo link_to('delete', 'sf_media_browser_dir_delete', array('sf_method' => 'delete', 'directory' => urlencode($relative_dir.'/'.$dir)), array('class' => 'delete', 'title' => sprintf(__('Delete folder "%s"'), $dir))) ?></div>
   </li>
@@ -70,7 +70,7 @@
 
 <?php foreach($files as $file): ?>
   <li class="file">
-    <?php include_component('sfMediaBrowser', 'icon', array('dir' => $real_dir, 'filename' => $file)) ?>
+    <?php include_component('sfMediaBrowser', 'icon', array('file_url' => $real_dir.'/'.$file)) ?>
   </li>
 <?php endforeach ?>
 </ul>

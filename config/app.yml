@@ -1,7 +1,6 @@
 all:
   sf_media_browser:
     root_dir:           /uploads
-    image_manager_class: sfMediaBrowserImageManager
     thumbnails_enabled:     true          # Enable thumbnail creation on upload (requires sfThumnailPlugin)
     thumbnails_dir:         .thumbnails    # Directory name for storing thumbnails
     thumbnails_max_width:   64
@@ -26,3 +25,7 @@ all:
         extensions: [txt]
       tarball:
         extensions: [tar, gz, zip, bzip, gzip, rar, 7z]
+  sfImageTransformPlugin:
+    mime_type:
+      auto_detect: true
+        

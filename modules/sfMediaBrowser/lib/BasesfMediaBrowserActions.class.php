@@ -24,32 +24,31 @@ class BasesfMediaBrowserActions extends sfActions
 
     if(!is_dir($this->root_path))
     {
-      throw new sfConfigurationException(sprintf('The root directory "%s" does not exists', $this->root_path));
+      throw new sfConfigurationException(sprintf('The root directory "%s" does not exists.', $this->root_path));
     }
   }
 
 
   public function executeIndex(sfWebRequest $request)
   {
-    // Dir relative to root
-    $current_dir = urldecode($request->getParameter('dir'));
-    $relative_dir = substr($current_dir, 0, 1) == '/' ? $current_dir : '/'.$current_dir;
-    
+    $dir = urldecode($request->getParameter('dir'));
+    // @TODO this is a fix for dirs like "//mydir". Fix the source why it sometimes makes it.
+    $relative_dir = preg_replace('`^//?(.*)`', '/$1', $dir);
 
     // browser dir relative to app_sf_media_browser_root_dir
     $this->relative_dir = $relative_dir;
     // real browser dir
-    $this->real_dir = sfConfig::get('app_sf_media_browser_root_dir').$current_dir;
+    $this->real_dir = sfConfig::get('app_sf_media_browser_root_dir').$relative_dir;
     // browser parent dir
     $this->parent_dir = $this->getParentDir($relative_dir);
     // system path for current dir
     $this->path = $this->root_path.$relative_dir;
+    
     // list of sub-directories in current dir
     $this->dirs = $this->getDirectories($this->path);
     // list of files in current dir
     $this->files = $this->getFiles($this->path);
     $this->current_route = $this->getContext()->getRouting()->getCurrentRouteName();
-    // @TODO : find a better way to retrieve current url parameters (any ?)
     $this->current_params = $request->getGetParameters();
     
     // forms
@@ -98,19 +97,19 @@ class BasesfMediaBrowserActions extends sfActions
     $form->bind($upload, $request->getFiles('upload'));
     if($form->isValid())
     {
-      $file = $form->getValue('file');
-      $filename = $file->getOriginalName();
+      $post_file = $form->getValue('file');
+      $filename = $post_file->getOriginalName();
       $name = sfMediaBrowserStringUtils::slugify(sfMediaBrowserUtils::getNameFromFile($filename));
-      $ext = sfMediaBrowserUtils::getExtensionFromFile($filename);
+      $ext = pathinfo($filename, PATHINFO_EXTENSION);
       $fullname = $ext ? $name.'.'.$ext : $name;
       $destination_dir = sfConfig::get('sf_web_dir').'/'.sfConfig::get('app_sf_media_browser_root_dir').$upload['directory'];
       // thumbnail
       if(sfConfig::get('app_sf_media_browser_thumbnails_enabled', false) && sfMediaBrowserUtils::getTypeFromExtension($ext) == 'image')
       {
-        $this->generateThumbnail($file->getTempName(), $fullname, $destination_dir);
+        $this->generateThumbnail($post_file->getTempName(), $fullname, $destination_dir);
       }
       $this->getUser()->setFlash('notice', 'file.create');
-      $file->save($destination_dir.'/'.$fullname);
+      $post_file->save($destination_dir.'/'.$fullname);
     }
     else
     {
@@ -126,17 +125,20 @@ class BasesfMediaBrowserActions extends sfActions
    */
   protected function generateThumbnail($source_file, $destination_name, $destination_dir)
   {
-    $class_name = sfConfig::get('app_sf_media_browser_image_manager_class');
-    $manager = new sfMediaBrowserImageManager($class_name, $source_file);
-    $manager->resize(sfConfig::get('app_sf_media_browser_thumbnails_max_width', 80),
-                     sfConfig::get('app_sf_media_browser_thumbnails_max_height', 80));
+    if(!class_exists('sfImage'))
+    {
+      throw new sfException('sfImageTransformPlugin must be installed in order to generate thumbnails.');
+    }
+    $thumb = new sfImage($source_file);
+    $thumb->thumbnail(sfConfig::get('app_sf_media_browser_thumbnails_max_width', 64),
+                     sfConfig::get('app_sf_media_browser_thumbnails_max_height', 64));
     $destination_dir = $destination_dir.'/'.sfConfig::get('app_sf_media_browser_thumbnails_dir', '.uploads');
     if(!file_exists($destination_dir))
     {
       mkdir($destination_dir);
       chmod($destination_dir, 0777);
     }
-    return $manager->save($destination_dir.'/'.$destination_name);
+    return $thumb->saveAs($destination_dir.'/'.$destination_name);
   }
 
 
