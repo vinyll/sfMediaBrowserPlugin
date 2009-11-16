@@ -1,7 +1,7 @@
 all:
   sf_media_browser:
     root_dir:           /uploads
-    thumbnails_enabled:     true          # Enable thumbnail creation on upload (requires sfThumnailPlugin)
+    thumbnails_enabled:     false          # Enable thumbnail creation on upload (requires sfThumnailPlugin)
     thumbnails_dir:         .thumbnails    # Directory name for storing thumbnails
     thumbnails_max_width:   64
     thumbnails_max_height:  64
