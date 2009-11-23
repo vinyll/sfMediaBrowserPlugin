@@ -1,0 +1,23 @@
+Create a file called “MediaBrowserTestForm.class.php” in your lib/form folder :
+
+
+  <?php
+  class MediaBrowserTestForm extends sfFormSymfony
+  {
+    public function setup()
+    {
+      $this->setWidget('image', new sfWidgetFormInputMediaBrowser());
+      $this->setValidator('image', new sfValidatorMediaBrowserFile());
+    }
+  }
+
+
+
+
+
+Create a template file :
+
+
+  <form>
+    <?php echo new MediaBrowserTestForm() ?>
+  </form>

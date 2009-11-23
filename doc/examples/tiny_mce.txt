@@ -1,0 +1,17 @@
+Insert the code below in your template :
+
+
+  <?php use_javascript('tiny_mce/tiny_mce.js') ?>
+  <?php use_javascript('/sfMediaBrowserPlugin/js/WindowManager.js') ?>
+  
+  <form>
+    <textarea></textarea>
+  </form>
+  <script type="text/javascript">
+  sfMediaBrowserWindowManager.init('<?php echo url_for('sf_media_browser_select') ?>');
+  tinyMCE.init({
+    mode : "textareas",
+    theme:  "advanced",
+    file_browser_callback: "sfMediaBrowserWindowManager.tinymceCallback"
+  });
+  </script>
