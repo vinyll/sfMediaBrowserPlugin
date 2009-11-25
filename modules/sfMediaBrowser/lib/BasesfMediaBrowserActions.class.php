@@ -31,7 +31,9 @@ class BasesfMediaBrowserActions extends sfActions
 
   public function executeIndex(sfWebRequest $request)
   {
-    $dir = urldecode($request->getParameter('dir'));
+    $requested_dir = urldecode($request->getParameter('dir'));
+    $dir = $this->secureDir($this->root_path, $requested_dir);
+    
     // @TODO this is a fix for dirs like "//mydir". Fix the source why it sometimes makes it.
     $relative_dir = preg_replace('`^//?(.*)`', '/$1', $dir);
 
@@ -158,6 +160,13 @@ class BasesfMediaBrowserActions extends sfActions
             : 'sfMediaBrowserFileObject'
             ;
     return new $class($file);
+  }
+  
+  
+  protected function secureDir($root_path, $dir)
+  {
+    $path = realpath($root_path.'/'.$dir);
+    return preg_match('`^'.$root_path.'`', $path) ? $dir : '';
   }
 
 
