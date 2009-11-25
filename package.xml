@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" packagerversion="1.4.1" version="2.0" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+  <name>sfMediaBrowserPlugin</name>
+  <channel>pear.symfony-project.com</channel>
+  <summary>Upload assets manager</summary>
+  <description>Upload and manage files, folders, images through a full interface. Also includes form widget for server browsing with its validator and a tinyMCE implementation.</description>
+  <lead>
+    <name>Vincent Agnano</name>
+    <user>Vincent Agnano</user>
+    <email>vincent.agnano@particul.es</email>
+    <active>yes</active>
+  </lead>
+  <date>2009-11-25</date>
+  <version>
+    <release>0.1.3</release>
+    <api>0.1.0</api>
+  </version>
+  <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+  </stability>
+  <license uri="http://www.symfony-project.org/license">MIT license</license>
+  <notes>-</notes>
+  <contents>
+    <dir name="/"><dir name="lib"><dir name="validator"><file name="sfValidatorMediaBrowserFile.class.php" role="data"/></dir><file name="sfMediaBrowserStringUtils.class.php" role="data"/><file name="sfMediaBrowserUtils.class.php" role="data"/><dir name="form"><file name="sfMediaBrowserDirectoryForm.class.php" role="data"/><file name="sfMediaBrowserFileRenameForm.class.php" role="data"/><file name="sfMediaBrowserUploadForm.class.php" role="data"/></dir><dir name="model"><file name="sfMediaBrowserFileObject.class.php" role="data"/><file name="sfMediaBrowserImageObject.class.php" role="data"/></dir><dir name="widget"><file name="sfWidgetFormInputMediaBrowser.class.php" role="data"/></dir></dir><dir name="doc"><dir name="examples"><file name="tiny_mce.txt" role="data"/><file name="file_upload_widget.txt" role="data"/></dir></dir><dir name="i18n"><file name="messages.fr.xml" role="data"/></dir><dir name="modules"><dir name="sfMediaBrowser"><dir name="actions"><file name="components.class.php" role="data"/><file name="actions.class.php" role="data"/></dir><dir name="lib"><file name="BasesfMediaBrowserComponents.class.php" role="data"/><file name="BasesfMediaBrowserActions.class.php" role="data"/></dir><dir name="templates"><file name="indexSuccess.php" role="data"/><file name="editSuccess.php" role="data"/><file name="_icon.php" role="data"/><file name="popupLayout.php" role="data"/></dir></dir></dir><file name="README" role="data"/><dir name="config"><file name="app.yml" role="data"/><file name="routing.yml" role="data"/></dir><dir name="web"><dir name="css"><file name="list.css" role="data"/><file name="form_widget.css" role="data"/></dir><dir name="js"><file name="popup.js" role="data"/><file name="WindowManager.js" role="data"/><file name="index.js" role="data"/><file name="form_widget.js" role="data"/><file name="FilePicker.js" role="data"/></dir><dir name="images"><dir name="icons"><file name="folder.png" role="data"/><file name="audio.png" role="data"/><file name="video.png" role="data"/><file name="file.png" role="data"/><file name="up.png" role="data"/><file name="tarball.png" role="data"/><file name="txt.png" role="data"/><file name="link.png" role="data"/><file name="bin.png" role="data"/><file name="doc.png" role="data"/><file name="pdf.png" role="data"/><file name="image.png" role="data"/></dir><dir name="icons-16"><file name="attach.png" role="data"/><file name="view.png" role="data"/><file name="delete.png" role="data"/><file name="trash.png" role="data"/></dir></dir></dir><file name="LICENSE" role="data"/></dir>
+
+  </contents>
+  <dependencies>
+    <required>
+      <php>
+        <min>5.2.4</min>
+      </php>
+      <pearinstaller>
+        <min>1.4.1</min>
+      </pearinstaller>
+      <package>
+        <name>symfony</name>
+        <channel>pear.symfony-project.com</channel>
+        <min>1.2.0</min>
+        <max>1.5.0</max>
+        <exclude>1.5.0</exclude>
+      </package>
+    </required>
+  </dependencies>
+  <phprelease></phprelease>
+  <changelog></changelog>
+</package>
