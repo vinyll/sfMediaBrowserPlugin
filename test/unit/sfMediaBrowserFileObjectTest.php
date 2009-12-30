@@ -1,7 +1,6 @@
 <?php
-$app = 'backend';
-require_once dirname(__FILE__).'/../bootstrap/functional.php';
 require_once dirname(__FILE__).'/../bootstrap/unit.php';
+require_once dirname(__FILE__).'/../../lib/sfMediaBrowserUtils.class.php';
 require_once dirname(__FILE__).'/../../lib/model/sfMediaBrowserFileObject.class.php';
 
 class sfMediaBrowserFileObjectMock extends sfMediaBrowserFileObject
@@ -20,7 +19,7 @@ sfConfig::set('app_sf_media_browser_root_dir', '/uploads');
 copy('http://www.google.fr/intl/fr_fr/images/logo.gif', sfConfig::get('sf_upload_dir').'/google.gif');
 
 
-$t = new lime_test(12, new lime_output_color());
+$t = new lime_test(13, new lime_output_color());
 
 $file = new sfMediaBrowserFileObjectMock('/uploads/google.gif', sfConfig::get('sf_web_dir'));
 
@@ -28,6 +27,7 @@ $t->is($file->cleanFolder('/my/folder'), '/my/folder', '->cleanFolder() preserve
 $t->is($file->cleanFolder('my/folder'), '/my/folder', '->cleanFolder() adds misssing start slash');
 $t->is($file->cleanFolder('/my/folder/'), '/my/folder', '->cleanFolder() removes ending extra slash');
 $t->is($file->cleanFolder('my/folder/'), '/my/folder', '->cleanFolder() reformats missing and extra slashes');
+$t->is($file->cleanFolder('/my//folder'), '/my/folder', '->cleanFolder() reformats double slashes to simple one');
 $t->is($file->getPath(), realpath(sfConfig::get('sf_upload_dir').'/google.gif'), '->getPath() returns well formatted root dir');
 $t->is($file->getUrl(), '/uploads/google.gif', '->getUrl() valid url');
 $t->is($file->getUrlDir(), '/uploads', '->getUrlDir() retrieves the directory part of url');

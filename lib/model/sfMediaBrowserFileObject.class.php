@@ -85,7 +85,7 @@ class sfMediaBrowserFileObject
 
   public function getPath()
   {
-    return realpath($this->root_path.'/'.$this->getUrl());
+    return realpath($this->cleanFolder($this->getRootPath().'/'.$this->getUrl()));
   }
   
   
@@ -103,7 +103,7 @@ class sfMediaBrowserFileObject
 
   public function getRootPath()
   {
-    return realpath($this->root_path);
+    return realpath($this->cleanFolder($this->root_path));
   }
 
   
@@ -137,7 +137,7 @@ class sfMediaBrowserFileObject
 
   protected function cleanFolder($folder)
   {
-    $cleaned = strtr($folder, '//', '/');
+    $cleaned = preg_replace('`/+`', '/', $folder);
     $cleaned = substr($cleaned, 0, 1) != '/' ? '/'.$cleaned : $cleaned;
     $cleaned = substr($cleaned, -1, 1) == '/' ? substr($cleaned, 0, -1) : $cleaned;
     return $cleaned;
