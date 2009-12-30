@@ -1,9 +1,12 @@
 <?php use_stylesheet('/sfMediaBrowserPlugin/css/list.css') ?>
 <?php use_javascript('/sfMediaBrowserPlugin/js/index.js') ?>
+<?php sfMediaBrowserUtils::loadAssets(sfConfig::get('app_sf_media_browser_assets_list')) ?>
 <?php use_helper('I18N') ?>
 <script type="text/javascript">
   delete_msg = "<?php echo __('Are you sure you want to delete this item ?') ?>";
 </script>
+
+<div id="sf_media_browser_user_message"></div>
 
 <div id="sf_media_browser_forms">
   <fieldset id="sf_media_browser_upload">
@@ -49,20 +52,24 @@
 
 
 
-<h2><?php echo __('Current dir') ?> : <?php echo $relative_dir?$relative_dir:'/' ?></h2>
+<h2><?php echo sprintf(__('Current directory : %s'), $relative_dir?$relative_dir:'/') ?></h2>
 
 
 <ul id="sf_media_browser_list">
 
   <?php if($parent_dir): ?>
   <li class="up">
-    <?php echo link_to(image_tag('/sfMediaBrowserPlugin/images/icons/up.png'), $current_route, array_merge($sf_data->getRaw('current_params'), array('dir' => $parent_dir))) ?>
+    <div class="icon">
+      <?php echo link_to(image_tag('/sfMediaBrowserPlugin/images/icons/up.png'), $current_route, array_merge($sf_data->getRaw('current_params'), array('dir' => $parent_dir))) ?>
+    </div>
   </li>
   <?php endif ?>
 
 <?php foreach($dirs as $dir): ?>
   <li class="folder">
-    <?php echo link_to(image_tag('/sfMediaBrowserPlugin/images/icons/folder.png'), $current_route, array_merge($sf_data->getRaw('current_params'), array('dir' => urlencode($relative_dir.'/'.pathinfo($dir, PATHINFO_BASENAME))))) ?>
+    <div class="icon">
+      <?php echo link_to(image_tag('/sfMediaBrowserPlugin/images/icons/folder.png'), $current_route, array_merge($sf_data->getRaw('current_params'), array('dir' => urlencode($relative_dir.'/'.pathinfo($dir, PATHINFO_BASENAME))))) ?>
+    </div>
     <div class="name"><?php echo $dir ?></div>
     <div class="action"><?php echo link_to('delete', 'sf_media_browser_dir_delete', array('sf_method' => 'delete', 'directory' => urlencode($relative_dir.'/'.$dir)), array('class' => 'delete', 'title' => sprintf(__('Delete folder "%s"'), $dir))) ?></div>
   </li>
@@ -74,3 +81,7 @@
   </li>
 <?php endforeach ?>
 </ul>
+
+<script type="text/javascript">
+var move_file_url = "<?php echo url_for('sf_media_browser_move') ?>";
+</script>

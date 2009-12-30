@@ -119,6 +119,50 @@ class BasesfMediaBrowserActions extends sfActions
     }
     $this->redirect($request->getReferer());
   }
+  
+
+  /**
+   *@todo Get rid of the purpose of urldecode for 'dir' parameter
+   */
+  public function executeMove(sfWebRequest $request)
+  {
+    $file = new sfMediaBrowserFileObject(urldecode($request->getParameter('file')));
+    $dir = new sfMediaBrowserFileObject($this->root_dir.'/'.urldecode($request->getParameter('dir')));
+    $new_name = $dir->getPath().'/'.$file->getName(true);
+    
+    $error = null;
+    try
+    {
+      $moved = rename($file->getPath(), $new_name);
+    }
+    catch(Exception $e)
+    {
+      $error = $e;
+    }
+    
+    if($request->isXmlHttpRequest())
+    {
+      sfContext::getInstance()->getConfiguration()->loadHelpers(array('I18N'));
+      if($error)
+      {
+        $reponse = array('status' => 'error', 'message' => __('Some error occured.'));
+      }
+      elseif($moved)
+      {
+        $response = array('status' => 'notice', 'message' => __('The file was successfully moved.'));
+      }
+      elseif(file_exists($new_name))
+      {
+        $response = array('status' => 'error', 'message' => __('A file with the same name already exists in this folder.'));
+      }
+      else
+      {
+        $response = array('status' => 'error', 'message' => __('Some error occured.'));
+      }
+      return $this->renderText(json_encode($response));
+    }
+    $this->redirect($request->getReferer());
+  }
 
   
   /**

@@ -13,8 +13,8 @@
         <target>Créer un nouveau répertoire</target>
       </trans-unit>
       <trans-unit id="3">
-        <source>Current dir</source>
-        <target>Répertoire en cours</target>
+        <source>Current directory : %s</source>
+        <target>Répertoire en cours : %s</target>
       </trans-unit>
       <trans-unit id="4">
         <source>Save</source>
@@ -40,17 +40,29 @@
         <source>The directory was successfully created.</source>
         <target>Le répértoire a été créé.</target>
       </trans-unit>
-      <trans-unit id="8">
+      <trans-unit id="10">
         <source>The directory was successfully deleted.</source>
         <target>Le répértoire a été supprimé.</target>
       </trans-unit>
-      <trans-unit id="8">
+      <trans-unit id="11">
         <source>The file was successfully uploaded.</source>
         <target>Le fichier a été chargé.</target>
       </trans-unit>
-      <trans-unit id="8">
+      <trans-unit id="12">
         <source>The file was successfully deleted.</source>
         <target>Le fichier a été chargé.</target>
+      </trans-unit>
+      <trans-unit id="13">
+        <source>Some error occured.</source>
+        <target>Une erreur est survenue.</target>
+      </trans-unit>
+      <trans-unit id="14">
+        <source>The file was successfully moved.</source>
+        <target>Le fichier a bien été déplacé.</target>
+      </trans-unit>
+      <trans-unit id="15">
+        <source>A file with the same name already exists in this folder.</source>
+        <target>Un fichier du même nom existe déjà dans ce dossier.</target>
       </trans-unit>
     </body>
   </file>

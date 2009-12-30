@@ -130,4 +130,25 @@ class sfMediaBrowserUtils
     }
     return @rmdir($path);
   }
+  
+  
+  static public function loadAssets(array $assets, sfResponse $response = null)
+  {
+    $response = $response ? $response : sfContext::getInstance()->getResponse();
+    
+    if(isset($assets['js']) && !empty($assets['js']))
+    {
+      foreach((array) $assets['js'] as $js)
+      {
+        $response->addJavascript($js);
+      }
+    }
+    if(isset($assets['css']) && !empty($assets['css']))
+    {
+      foreach((array) $assets['css'] as $css)
+      {
+        $response->addStylesheet($css);
+      }
+    }
+  }
 }
