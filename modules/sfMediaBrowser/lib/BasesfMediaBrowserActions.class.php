@@ -4,7 +4,7 @@
  *
  *
  * @package     sfMediaBrowser
- * @author      Vincent Agnano <vincet.agnano@particul.es>
+ * @author      Vincent Agnano <vincent.agnano@particul.es>
  *
  * Note :
  * - ***_path = system directory
@@ -19,32 +19,22 @@ class BasesfMediaBrowserActions extends sfActions
 
     // Configured root dir
     $this->root_dir = sfconfig::get('app_sf_media_browser_root_dir');
-
-    $this->root_path = $this->web_path.$this->root_dir;
-
-    if(!is_dir($this->root_path))
-    {
-      throw new sfConfigurationException(sprintf('The root directory "%s" does not exists.', $this->root_path));
-    }
   }
 
 
   public function executeIndex(sfWebRequest $request)
   {
     $requested_dir = urldecode($request->getParameter('dir'));
-    $dir = $this->secureDir($this->root_path, $requested_dir);
-    
-    // @TODO this is a fix for dirs like "//mydir". Fix the source why it sometimes makes it.
-    $relative_dir = preg_replace('`^//?(.*)`', '/$1', $dir);
+    $relative_dir = $this->secureDir($this->web_path, $requested_dir);
 
-    // browser dir relative to app_sf_media_browser_root_dir
+    // browser dir relative to sf_web_dir
     $this->relative_dir = $relative_dir;
-    // real browser dir
-    $this->real_dir = sfConfig::get('app_sf_media_browser_root_dir').$relative_dir;
+    // User dispay dir
+    $this->display_dir = preg_replace('`^('.$this->root_dir.')`', '', $relative_dir);
     // browser parent dir
     $this->parent_dir = $this->getParentDir($relative_dir);
     // system path for current dir
-    $this->path = $this->root_path.$relative_dir;
+    $this->path = $this->web_path.$relative_dir;
     
     // list of sub-directories in current dir
     $this->dirs = $this->getDirectories($this->path);
@@ -126,8 +116,8 @@ class BasesfMediaBrowserActions extends sfActions
    */
   public function executeMove(sfWebRequest $request)
   {
-    $file = new sfMediaBrowserFileObject(urldecode($request->getParameter('file')));
-    $dir = new sfMediaBrowserFileObject($this->root_dir.'/'.urldecode($request->getParameter('dir')));
+    $file = new sfMediaBrowserFileObject($request->getParameter('file'));
+    $dir = new sfMediaBrowserFileObject(urldecode($request->getParameter('dir')));
     $new_name = $dir->getPath().'/'.$file->getName(true);
     
     $error = null;

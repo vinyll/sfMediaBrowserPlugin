@@ -29,10 +29,10 @@ class sfMediaBrowserFileObject
    *
    * @param string $file the file path from under web_root
    */
-  public function __construct($file)
+  public function __construct($file, $root_path = null)
   {
     $this->file_url = $file;
-    $this->root_path = realpath(sfConfig::get('sf_web_dir'));
+    $this->root_path = $root_path ? realpath($root_path) : realpath(sfConfig::get('sf_web_dir'));
   }
   
 
