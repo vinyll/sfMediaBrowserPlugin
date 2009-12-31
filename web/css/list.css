@@ -56,6 +56,7 @@ ul#sf_media_browser_list .icon img {
 }
 
 ul#sf_media_browser_list .name {
+  display:      block;
   font-size:    .8em;
   background:   #999;
   color:        #FFF;
@@ -91,4 +92,33 @@ ul#sf_media_browser_list .name {
 }
 .error {
   background:  #FFCCCC;
+}
+
+label.name input#rename_tag {
+  float:      left;
+  width:      auto;
+  max-width:  80%;
+  text-align: center;
+  background: transparent;
+  color:      inherit;
+  border:     none;
+  border-bottom:  1px dashed #FFF;
+}
+
+label.name span#validate {
+  display:  block;
+  text-indent: -5000px;
+  float:    left;
+  width:    16px;
+  height:   16px;
+  background: transparent url('../images/icons-16/ok.png') no-repeat;
+}
+
+label.name span#cancel {
+  display:  block;
+  text-indent: -5000px;
+  float:    left;
+  width:    16px;
+  height:   16px;
+  background: transparent url('../images/icons-16/cancel.png') no-repeat;
 }

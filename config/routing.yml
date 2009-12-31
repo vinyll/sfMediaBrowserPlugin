@@ -1,12 +1,10 @@
+sf_media_browser_rename:
+  url:    sf_media_browser/rename
+  param:  { module: sfMediaBrowser, action: rename }
+  
 sf_media_browser_move:
   url:    sf_media_browser/move
   param:  { module: sfMediaBrowser, action: move }
-
-sf_media_browser_rename:
-  url:    sf_media_browser/rename/:type
-  params: { module: sfMediaBrowser, action: rename }
-  class:        sfRequestRoute
-  requirements: { sf_method: post }
 
 sf_media_browser_edit:
   url:    sf_media_browser/edit

@@ -25,14 +25,16 @@ class BasesfMediaBrowserActions extends sfActions
   public function executeIndex(sfWebRequest $request)
   {
     $requested_dir = urldecode($request->getParameter('dir'));
-    $relative_dir = $this->secureDir($this->web_path, $requested_dir);
+    $relative_dir = $this->isPathSecured($this->web_path.'/'.$this->root_dir, $this->web_path.'/'.$requested_dir)
+                  ? $requested_dir
+                  : $this->root_dir;
 
     // browser dir relative to sf_web_dir
     $this->relative_dir = $relative_dir;
     // User dispay dir
     $this->display_dir = preg_replace('`^('.$this->root_dir.')`', '', $relative_dir);
     // browser parent dir
-    $this->parent_dir = $this->getParentDir($relative_dir);
+    $this->parent_dir = $this->relative_dir != $this->root_dir ? $this->getParentDir($this->relative_dir) : '';
     // system path for current dir
     $this->path = $this->web_path.$relative_dir;
     
@@ -153,6 +155,49 @@ class BasesfMediaBrowserActions extends sfActions
     }
     $this->redirect($request->getReferer());
   }
+  
+  
+  public function executeRename(sfWebRequest $request)
+  {
+    $file = new sfMediaBrowserFileObject($request->getParameter('file'));
+    $name = sfMediaBrowserStringUtils::slugify(pathinfo($request->getParameter('name'), PATHINFO_FILENAME));
+    $ext = $file->getExtension();
+    $valid_filename = $ext ? $name.'.'.$ext : $name;
+    $new_name = dirname($file->getPath()).'/'.$valid_filename;
+    
+    $error = null;
+    try
+    {
+      $renamed = rename($file->getPath(), $new_name);
+    }
+    catch(Exception $e)
+    {
+      $error = $e;
+    }
+    
+    if($request->isXmlHttpRequest())
+    {
+      sfContext::getInstance()->getConfiguration()->loadHelpers(array('I18N'));
+      if($error)
+      {
+        $reponse = array('status' => 'error', 'message' => __('Some error occured.'));
+      }
+      elseif($renamed)
+      {
+        $response = array('status' => 'notice', 'message' => __('The file was successfully renamed.'), 'name' => $valid_filename, 'url' => dirname($file->getUrl()).'/'.$valid_filename);
+      }
+      elseif(file_exists($new_name))
+      {
+        $response = array('status' => 'error', 'message' => __('A file with the same name already exists in this folder.'));
+      }
+      else
+      {
+        $response = array('status' => 'error', 'message' => __('Some error occured.'));
+      }
+      return $this->renderText(json_encode($response));
+    }
+    $this->redirect($request->getReferer());
+  }
 
   
   /**
@@ -168,7 +213,7 @@ class BasesfMediaBrowserActions extends sfActions
     $thumb = new sfImage($source_file);
     $thumb->thumbnail(sfConfig::get('app_sf_media_browser_thumbnails_max_width', 64),
                      sfConfig::get('app_sf_media_browser_thumbnails_max_height', 64));
-    $destination_dir = $destination_dir.'/'.sfConfig::get('app_sf_media_browser_thumbnails_dir', '.uploads');
+    $destination_dir = $destination_dir.'/'.sfConfig::get('app_sf_media_browser_thumbnails_dir');
     if(!file_exists($destination_dir))
     {
       mkdir($destination_dir);
@@ -196,11 +241,15 @@ class BasesfMediaBrowserActions extends sfActions
     return new $class($file);
   }
   
-  
-  protected function secureDir($root_path, $dir)
+  /**
+   *
+   * @param string $root_path
+   * @param string $dir
+   * @return mixed <string, boolean>
+   */
+  protected function isPathSecured($root_path, $requested_path)
   {
-    $path = realpath($root_path.'/'.$dir);
-    return preg_match('`^'.$root_path.'`', $path) ? $dir : '';
+    return preg_match('`^'.realpath($root_path).'`', realpath($requested_path));
   }
 
 
@@ -211,22 +260,6 @@ class BasesfMediaBrowserActions extends sfActions
   }
 
 
-  public function executeRename(sfWebRequest $request)
-  {
-    $type = $request->getParameter('type');
-    $form = new sfMediaBrowserFileRenameForm();
-    $form->bind($request->getParameter('rename'));
-    if($form->isValid())
-    {
-      $file = new sfMediaBrowserFileObject($form->getValue('directory').'/'.$form->getValue('current_name'));
-      rename($file->getSystemPath(), dirname($file->getSystemPath()).'/'.$form->getValue('new_name'));
-      $this->redirect($this->generateUrl('sf_media_browser_edit', array('file' => $form->getValue('new_name'))));
-    }
-    //$this->redirect($request->getReferer());
-
-  }
-
-
 # Protected
 
   protected function getDirectories($path)
@@ -234,7 +267,8 @@ class BasesfMediaBrowserActions extends sfActions
     return sfFinder::type('dir')->
             maxdepth(0)->
             prune('.*')->
-            discard('.*')->
+            discard(sfConfig::get('app_sf_media_browser_thumbnails_dir'))->
+            sort_by_name()->
             relative()->
             in($path)
             ;
@@ -245,9 +279,8 @@ class BasesfMediaBrowserActions extends sfActions
   {
     return sfFinder::type('files')->
              maxdepth(0)->
-             prune('.*')->
-             discard('.*')->
              relative()->
+             sort_by_name()->
              in($path)
              ;
   }

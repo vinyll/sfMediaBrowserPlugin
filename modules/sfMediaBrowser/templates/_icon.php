@@ -1,7 +1,7 @@
 <div class="icon">
   <?php echo link_to(image_tag($file->getIcon()), $file->getUrl(), array('target' => '_blank')) ?>
 </div>
-<div class="name"><?php echo $file->getName() ?></div>
+<label class="name"><?php echo $file->getName() ?></label>
 <div class="action">
   <span class="size"><?php echo $file->getSize() ?> Kb</span>
   <?php if($file->isImage()): ?>

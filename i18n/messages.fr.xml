@@ -38,7 +38,7 @@
       </trans-unit>
       <trans-unit id="9">
         <source>The directory was successfully created.</source>
-        <target>Le répértoire a été créé.</target>
+        <target>Le répértoire a été créé correctement.</target>
       </trans-unit>
       <trans-unit id="10">
         <source>The directory was successfully deleted.</source>
@@ -46,11 +46,11 @@
       </trans-unit>
       <trans-unit id="11">
         <source>The file was successfully uploaded.</source>
-        <target>Le fichier a été chargé.</target>
+        <target>Le fichier a été chargé correctement.</target>
       </trans-unit>
       <trans-unit id="12">
         <source>The file was successfully deleted.</source>
-        <target>Le fichier a été chargé.</target>
+        <target>Le fichier a été supprimé correctement.</target>
       </trans-unit>
       <trans-unit id="13">
         <source>Some error occured.</source>
@@ -58,11 +58,15 @@
       </trans-unit>
       <trans-unit id="14">
         <source>The file was successfully moved.</source>
-        <target>Le fichier a bien été déplacé.</target>
+        <target>Le fichier a été déplacé correctement.</target>
       </trans-unit>
       <trans-unit id="15">
         <source>A file with the same name already exists in this folder.</source>
         <target>Un fichier du même nom existe déjà dans ce dossier.</target>
+      </trans-unit>
+      <trans-unit id="16">
+        <source>The file was successfully renamed.</source>
+        <target>Le fichier a été renommé correctement.</target>
       </trans-unit>
     </body>
   </file>

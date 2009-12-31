@@ -70,7 +70,7 @@
     <div class="icon">
       <?php echo link_to(image_tag('/sfMediaBrowserPlugin/images/icons/folder.png'), $current_route, array_merge($sf_data->getRaw('current_params'), array('dir' => $relative_dir.'/'.$dir))) ?>
     </div>
-    <div class="name"><?php echo $dir ?></div>
+    <label class="name"><?php echo $dir ?></label>
     <div class="action"><?php echo link_to('delete', 'sf_media_browser_dir_delete', array('sf_method' => 'delete', 'directory' => urlencode($relative_dir.'/'.$dir)), array('class' => 'delete', 'title' => sprintf(__('Delete folder "%s"'), $dir))) ?></div>
   </li>
 <?php endforeach ?>
@@ -84,4 +84,5 @@
 
 <script type="text/javascript">
 var move_file_url = "<?php echo url_for('sf_media_browser_move') ?>";
+var rename_file_url = "<?php echo url_for('sf_media_browser_rename') ?>";
 </script>
