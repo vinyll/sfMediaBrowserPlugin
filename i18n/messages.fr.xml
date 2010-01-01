@@ -68,6 +68,9 @@
         <source>The file was successfully renamed.</source>
         <target>Le fichier a été renommé correctement.</target>
       </trans-unit>
+      <trans-unit id="17">
+        <source>The directory could not be created.</source>
+        <target>Le répértoire n'a pas pu être créé.</target>
     </body>
   </file>
 </xliff>

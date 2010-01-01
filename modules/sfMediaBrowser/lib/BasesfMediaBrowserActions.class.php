@@ -19,13 +19,15 @@ class BasesfMediaBrowserActions extends sfActions
 
     // Configured root dir
     $this->root_dir = sfconfig::get('app_sf_media_browser_root_dir');
+    
+    $this->root_path = realpath($this->web_path.'/'.$this->root_dir);
   }
 
 
   public function executeIndex(sfWebRequest $request)
   {
     $requested_dir = urldecode($request->getParameter('dir'));
-    $relative_dir = $this->isPathSecured($this->web_path.'/'.$this->root_dir, $this->web_path.'/'.$requested_dir)
+    $relative_dir = $this->isPathSecured($this->root_path, $this->web_path.'/'.$requested_dir)
                   ? $requested_dir
                   : $this->root_dir;
 
@@ -34,7 +36,7 @@ class BasesfMediaBrowserActions extends sfActions
     // User dispay dir
     $this->display_dir = preg_replace('`^('.$this->root_dir.')`', '', $relative_dir);
     // browser parent dir
-    $this->parent_dir = $this->relative_dir != $this->root_dir ? $this->getParentDir($this->relative_dir) : '';
+    $this->parent_dir = $this->relative_dir != $this->root_dir ? dirname($this->relative_dir) : '';
     // system path for current dir
     $this->path = $this->web_path.$relative_dir;
     
@@ -65,10 +67,10 @@ class BasesfMediaBrowserActions extends sfActions
     $form->bind($request->getParameter('directory'));
     if($form->isValid())
     {
-      $real_path = realpath(sfConfig::get('sf_web_dir').'/'.sfConfig::get('app_sf_media_browser_root_dir').'/'.$form->getValue('directory'));
+      $real_path = realpath($this->web_path.'/'.$form->getValue('directory'));
       $full_name = $real_path.'/'.$form->getValue('name');
-      $created = mkdir($full_name);
-      chmod($full_name, 0777);
+      $created = @mkdir($full_name);
+      @chmod($full_name, 0777);
       $this->getUser()->setFlash($created ? 'notice' : 'error', 'directory.create');
     }
     $this->redirect($request->getReferer());
@@ -77,7 +79,8 @@ class BasesfMediaBrowserActions extends sfActions
 
   public function executeDeleteDirectory(sfWebRequest $request)
   {
-    $deleted = sfMediaBrowserUtils::deleteRecursive(urldecode(sfConfig::get('sf_web_dir').'/'.sfConfig::get('app_sf_media_browser_root_dir').$request->getParameter('directory')));
+    $dir = new sfMediaBrowserFileObject(urldecode($request->getParameter('directory')));
+    $deleted = sfMediaBrowserUtils::deleteRecursive($dir->getPath());
     $this->getUser()->setFlash($deleted ? 'notice' : 'error', 'directory.delete');
     $this->redirect($request->getReferer());
   }
@@ -93,7 +96,7 @@ class BasesfMediaBrowserActions extends sfActions
     {
       $post_file = $form->getValue('file');
       $filename = $post_file->getOriginalName();
-      $name = sfMediaBrowserStringUtils::slugify(sfMediaBrowserUtils::getNameFromFile($filename));
+      $name = sfMediaBrowserStringUtils::slugify(pathinfo($filename, PATHINFO_FILENAME));
       $ext = pathinfo($filename, PATHINFO_EXTENSION);
       $fullname = $ext ? $name.'.'.$ext : $name;
       $destination_dir = sfConfig::get('sf_web_dir').'/'.sfConfig::get('app_sf_media_browser_root_dir').$upload['directory'];
@@ -232,14 +235,17 @@ class BasesfMediaBrowserActions extends sfActions
   }
   
   
+# Protected
+
   protected function createFileObject($file)
   {
-    $class = sfMediaBrowserUtils::getTypeFromExtension(sfMediaBrowserUtils::getExtensionFromFile($file)) =='image'
+    $class = sfMediaBrowserUtils::getTypeFromExtension(pathinfo($file, PATHINFO_EXTENSION)) == 'image'
             ? 'sfMediaBrowserImageObject'
             : 'sfMediaBrowserFileObject'
             ;
     return new $class($file);
   }
+
   
   /**
    *
@@ -252,15 +258,6 @@ class BasesfMediaBrowserActions extends sfActions
     return preg_match('`^'.realpath($root_path).'`', realpath($requested_path));
   }
 
-
-  public function executeEdit(sfWebRequest $request)
-  {
-    $this->file = $this->createFileObject(urldecode($request->getParameter('file')));
-    $this->rename_form = new sfMediaBrowserFileRenameForm(array('new_name' => $this->file->getName(), 'current_name' => $this->file->getName()));
-  }
-
-
-# Protected
 
   protected function getDirectories($path)
   {
@@ -283,25 +280,6 @@ class BasesfMediaBrowserActions extends sfActions
              sort_by_name()->
              in($path)
              ;
-  }
-
-  protected function getParentDir($path)
-  {
-    // Remove trailing slash
-    if(substr($path, -1, 1) == '/')
-    {
-      $path = substr($path, 0, -1);
-    }
-    // Find last slash
-    $slash_pos = strrpos($path, '/');
-
-    // return root if path is a root subfolder
-    if($slash_pos === 0)
-    {
-      return '/';
-    }
-
-    return (string) substr($path, 0, $slash_pos);
   }
   
 }

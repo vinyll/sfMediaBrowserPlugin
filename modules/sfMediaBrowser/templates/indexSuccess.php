@@ -34,6 +34,8 @@
     <?php echo __('The directory could not be deleted.') ?>
   <?php elseif($sf_user->getFlash('error') == 'file.create'): ?>
     <?php echo __('The file could not be uploaded.') ?>
+  <?php elseif($sf_user->getFlash('error') == 'directory.create'): ?>
+    <?php echo __('The directory could not be created.') ?>
   <?php endif ?>
   </div>
 <?php elseif($sf_user->hasFlash('notice')): ?>
@@ -68,7 +70,7 @@
 <?php foreach($dirs as $dir): ?>
   <li class="folder">
     <div class="icon">
-      <?php echo link_to(image_tag('/sfMediaBrowserPlugin/images/icons/folder.png'), $current_route, array_merge($sf_data->getRaw('current_params'), array('dir' => $relative_dir.'/'.$dir))) ?>
+      <?php echo link_to(image_tag('/sfMediaBrowserPlugin/images/icons/folder.png'), $current_route, array_merge($sf_data->getRaw('current_params'), array('dir' => $relative_dir.'/'.$dir)), array('title' => $dir)) ?>
     </div>
     <label class="name"><?php echo $dir ?></label>
     <div class="action"><?php echo link_to('delete', 'sf_media_browser_dir_delete', array('sf_method' => 'delete', 'directory' => urlencode($relative_dir.'/'.$dir)), array('class' => 'delete', 'title' => sprintf(__('Delete folder "%s"'), $dir))) ?></div>

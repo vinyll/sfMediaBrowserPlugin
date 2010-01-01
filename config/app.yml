@@ -1,3 +1,7 @@
+test:
+  sf_media_browser:
+    root_dir:           /tests-uploads
+
 all:
   sf_media_browser:
     root_dir:           /uploads
