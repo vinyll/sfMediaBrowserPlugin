@@ -99,7 +99,7 @@ class BasesfMediaBrowserActions extends sfActions
       $name = sfMediaBrowserStringUtils::slugify(pathinfo($filename, PATHINFO_FILENAME));
       $ext = pathinfo($filename, PATHINFO_EXTENSION);
       $fullname = $ext ? $name.'.'.$ext : $name;
-      $destination_dir = sfConfig::get('sf_web_dir').'/'.sfConfig::get('app_sf_media_browser_root_dir').$upload['directory'];
+      $destination_dir = realpath(sfConfig::get('sf_web_dir').'/'.$upload['directory']);
       // thumbnail
       if(sfConfig::get('app_sf_media_browser_thumbnails_enabled', false) && sfMediaBrowserUtils::getTypeFromExtension($ext) == 'image')
       {

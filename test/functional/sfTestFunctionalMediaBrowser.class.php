@@ -24,7 +24,7 @@ class sfTestFunctionalMediaBrowser extends sfTestFunctional
   public function directoryExists($dirname, $expected = true)
   {
     $this->with('response')->checkElement(
-      sprintf('#sf_media_browser_list li.folder label.name:contains("%s")', $dirname),
+      sprintf('#sf_media_browser_list li.folder label.name:contains(%s)', $dirname),
       $expected
     );
     return $this;
@@ -40,8 +40,33 @@ class sfTestFunctionalMediaBrowser extends sfTestFunctional
   public function deleteDirectory($dirname)
   {
     $this->info(sprintf(' Deleting directory "%s"', $dirname))->
-    click('#sf_media_browser_list li.folder .action a.delete')->
-    followRedirect();
+      click(sprintf('#sf_media_browser_list .folder label.name:contains(%s)+div.action a.delete', $dirname))->
+      followRedirect();
+    return $this;
+  }
+  
+  
+  public function uploadFile($file)
+  {
+    $this->info(sprintf(' Uploading file "%s"', $file))->
+      click('#sf_media_browser_upload form input.submit', array('upload' => array('file' => $file)))->
+      followRedirect();
+    return $this;
+  }
+  
+  
+  public function fileExists($filename, $expected = true)
+  {
+    $this->with('response')->checkElement(sprintf('#sf_media_browser_list .file label.name:contains(%s)', $filename), $expected);
+    return $this;
+  }
+  
+  
+  public function deleteFile($filename)
+  {
+    $this->info(sprintf(' Deleting file "%s"', $filename))->
+      click(sprintf('#sf_media_browser_list .file label.name:contains(%s)+div.action a.delete', $filename))->
+      followRedirect();
     return $this;
   }
 }

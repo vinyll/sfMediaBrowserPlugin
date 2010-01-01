@@ -2,7 +2,7 @@
 include dirname(__FILE__).'/../bootstrap/functional.php';
 include dirname(__FILE__).'/sfTestFunctionalMediaBrowser.class.php';
 
-$upload_dir = sfConfig::get('sf_web_dir').'/'.sfConfig::get('app_sf_media_browser_root_dir', '/tests-uploads');
+$upload_dir = sfConfig::get('sf_web_dir').'/'.sfConfig::get('app_sf_media_browser_root_dir', 'tests-uploads');
 $delete_upload_dir = false;
 if(!realpath($upload_dir))
 {
@@ -39,6 +39,10 @@ $browser->
   createDirectory('sub folder')->
   directoryExists('sub-folder')->
   
+  info('Upload a file into the subdirectory')->
+  uploadFile(dirname(__FILE__).'/../fixtures/my_test.jpg')->fileExists('my_test.jpg')->
+  deleteFile('my_test.jpg')->fileExists('my_test.jpg', false)->
+  
   click('li.up a')->with('response')->checkElement('h2', 'Current directory : /')->
   deleteDirectory('my-functional-test-dir')->
   directoryExists('my-functional-test-dir', false)
@@ -47,5 +51,5 @@ $browser->
 
 if($delete_upload_dir)
 {
-  rmdir($upload_dir);
+  sfMediaBrowserUtils::deleteRecursive($upload_dir);
 }

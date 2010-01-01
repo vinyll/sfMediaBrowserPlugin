@@ -2,10 +2,7 @@
 $app = 'backend';
 require_once dirname(__FILE__).'/../bootstrap/functional.php';
 require_once dirname(__FILE__).'/../bootstrap/unit.php';
-require_once dirname(__FILE__).'/../../lib/sfMediaBrowserUtils.class.php';
 
-
-sfConfig::set('sf_plugins_dir', dirname(__FILE__).'/../../..');
 $icon_dir = '/sfMediaBrowserPlugin/images/icons';
 $t = new lime_test(23, new lime_output_color());
 
