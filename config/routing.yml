@@ -12,7 +12,7 @@ sf_media_browser_edit:
 
 sf_media_browser:
   url:    sf_media_browser
-  params: { module: sfMediaBrowser, action: index }
+  params: { module: sfMediaBrowser, action: list }
 
 sf_media_browser_dir_create:
   url:    sf_media_browser/dir_create

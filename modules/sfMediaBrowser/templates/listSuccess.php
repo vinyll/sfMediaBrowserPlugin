@@ -1,5 +1,3 @@
-<?php use_stylesheet('/sfMediaBrowserPlugin/css/list.css') ?>
-<?php use_javascript('/sfMediaBrowserPlugin/js/index.js') ?>
 <?php sfMediaBrowserUtils::loadAssets(sfConfig::get('app_sf_media_browser_assets_list')) ?>
 <?php use_helper('I18N') ?>
 <script type="text/javascript">

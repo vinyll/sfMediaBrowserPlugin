@@ -24,7 +24,7 @@ class BasesfMediaBrowserActions extends sfActions
   }
 
 
-  public function executeIndex(sfWebRequest $request)
+  public function executeList(sfWebRequest $request)
   {
     $requested_dir = urldecode($request->getParameter('dir'));
     $relative_dir = $this->isPathSecured($this->root_path, $this->web_path.'/'.$requested_dir)
@@ -56,8 +56,8 @@ class BasesfMediaBrowserActions extends sfActions
   public function executeSelect(sfWebRequest $request)
   {
     $this->setLayout(dirname(__FILE__).'/../templates/popupLayout');
-    $this->setTemplate('index');
-    $this->executeIndex($request);
+    $this->setTemplate('list');
+    $this->executeList($request);
   }
 
 
