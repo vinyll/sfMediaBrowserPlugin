@@ -36,11 +36,31 @@ run :
 
 ## How to run the media browser ?
 
-edit /apps/_your\_app_/app.yml :
+edit /apps/_your\_app_/settings.yml :
 
     enabled_modules:        [sfMediaBrowser]
 
 Open your browser, go to your app and run the url /sf\_media\_browser, and play around !
+
+
+## How to enable moving and renaming ?
+
+Download [ready to use jquery files](http://particul.es/blog/public/vince/sfmediabrowserplugin/js.zip).
+Copy the /js files into you /web/js folder.
+
+Now edit /apps/_your\_app_/app.yml :
+
+    all:
+      sf_media_browser:
+        assets_list:                           
+          js:  [/js/jquery.js, /js/jquery.dragndrop.js, /sfMediaBrowserPlugin/js/list.jquery.js]
+          css: [/sfMediaBrowserPlugin/css/list.css]
+
+
+You can now :
+
+* drag and drop a file/folder into another folder to move it.
+* doubleclick on a file/folder label to edit its name.
 
 
 ## How to use the file upload widget ?
