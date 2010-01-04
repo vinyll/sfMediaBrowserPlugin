@@ -61,17 +61,11 @@ class sfWidgetFormInputMediaBrowser extends sfWidgetForm
 
     $tag .= $this->includeView();
     $tag .= $this->includeDelete();
-
-    // add
-    if(!isset($attributes['load_javascript']) || $attributes['load_javascript'] !== false)
-    {
-      $tag .= $this->loadJavascript(array_merge($attributes, array('url' => $url)));
-    }
-    if(!isset($attributes['load_stylesheet']) || $attributes['load_stylesheet'] !== false)
-    {
-      $this->context->getResponse()->addStylesheet('/sfMediaBrowserPlugin/css/form_widget.css');
-    }
-
+    
+    
+    // Add javascripts and stylesheets upon app configuration
+    sfMediaBrowserUtils::loadAssets(sfConfig::get('app_sf_media_browser_assets_widget'));
+    $tag .= $this->loadJavascript(array_merge($attributes, array('url' => $url)));
 
     $tag = $this->wrapTag($tag);
     return $tag;
@@ -84,8 +78,6 @@ class sfWidgetFormInputMediaBrowser extends sfWidgetForm
    */
   protected function loadJavascript(array $params)
   {
-    $this->context->getResponse()->addJavascript('/sfMediaBrowserPlugin/js/WindowManager.js');
-    $this->context->getResponse()->addJavascript('/sfMediaBrowserPlugin/js/form_widget.js');
     return <<<EOF
     <script type="text/javascript">
       sfMediaBrowserWindowManager.addListerner({target: '{$params['id']}', url: '{$params['url']}'});
