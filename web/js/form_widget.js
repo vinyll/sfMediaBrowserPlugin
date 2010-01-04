@@ -40,7 +40,7 @@ HTMLElement.prototype.getElementByClassName = function(class_name, index) {
 window.onload = function() {
   var wrappers = document.getElementsByClassName('sf_media_browser_input_file');
 
-  var wrapper, i=0, delete_link, view_lin, input;
+  var wrapper, i=0, delete_link, view_link, input;
   for(i; i<wrappers.length;++i) {
     wrapper = wrappers[i];
     input = wrapper.getElementByTagName('input');
