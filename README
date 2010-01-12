@@ -23,7 +23,7 @@ That means you insert 2 line of javascript and you browser your images, videos a
     cd plugins
     git clone git://github.com/vinyll/sfMediaBrowserPlugin.git
 
-_If you don't have git install and don't want to install it, you can [download a sandbox version][19]_
+_If you don't have git install and don't want to install it, you can [download a sandbox version](http://github.com/vinyll/sfMediaBrowserPlugin/downloads)
 
 edit /config/ProjectConfiguration.class.php :
 
@@ -45,7 +45,7 @@ Open your browser, go to your app and run the url /sf\_media\_browser, and play 
 
 ## How to enable moving and renaming ?
 
-Download [ready to use jquery files](http://particul.es/blog/public/vince/sfmediabrowserplugin/js.zip).
+[Download ready to use jquery files](http://particul.es/blog/public/vince/sfmediabrowserplugin/js.zip).
 Copy the /js files into you /web/js folder.
 
 Now edit /apps/_your\_app_/app.yml :
@@ -120,14 +120,12 @@ You can participate by many ways :
 
 ## TODO
   
-  - improve security and lock parent root folder browsing
   - test sfValidatorMediaBrowserFile
-  - add another browsing view with folder tree and files seperated
-  - add file edition functionalities (move, rename)
-  - add image edition functionalities (resize and maybe rotate)
+  - add another browsing view with folder tree and files seperated ?
+  - add image edition functionalities (resize and maybe rotate ?)
   - add permission managment (sfModularSecurity ?)
-  - add a jquery optional version (dom's filepicker. ajax view ? crop image ?)
-  - add sfDynamics packages managment
+  - finish the jquery optional version (dom's filepicker. ajax view ? crop image ?)
+  - add sfDynamics packages managment ?
 
 
 ## About

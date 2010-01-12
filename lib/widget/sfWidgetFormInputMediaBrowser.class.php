@@ -20,6 +20,7 @@ class sfWidgetFormInputMediaBrowser extends sfWidgetForm
 {
 
   protected $context;
+  
   /**
    * Constructor.
    *
@@ -27,7 +28,9 @@ class sfWidgetFormInputMediaBrowser extends sfWidgetForm
    *
    *  * type: The widget type (text by default)
    *
-   * @param array $options     An array of options
+   * @param array $options     An array of options :
+   *   - dir: The default directory to display if no value exists.
+   *          The url is relative to app_sf_media_browser_root_dir
    * @param array $attributes  An array of default HTML attributes
    *
    * @see sfWidgetForm
@@ -35,9 +38,11 @@ class sfWidgetFormInputMediaBrowser extends sfWidgetForm
   protected function configure($options = array(), $attributes = array())
   {
     $this->addOption('type', 'text');
+    $this->addOption('dir', null);
     
     $this->setOption('is_hidden', false);
   }
+  
 
   /**
    * @param  string $name        The element name
@@ -55,20 +60,23 @@ class sfWidgetFormInputMediaBrowser extends sfWidgetForm
 
     $attributes = array_merge(array('type' => $this->getOption('type'), 'name' => $name, 'value' => $value), $attributes);
     $attributes = $this->fixFormId($attributes);
-    $url = $this->context->getRouting()->generate('sf_media_browser_select');
-
-    $tag = $this->renderTag('input', $attributes);
-
-    $tag .= $this->includeView();
-    $tag .= $this->includeDelete();
     
+    // Get default dir for popup window
+    $dir = $value
+         ? dirname($value)
+         : sfConfig::get('app_sf_media_browser_root_dir').'/'.$this->getOption('dir');
     
-    // Add javascripts and stylesheets upon app configuration
+    $url = $this->context->getRouting()->generate('sf_media_browser_select', array('dir' => $dir));
+
+    $tag = $this->renderTag('input', $attributes)
+           .$this->includeView()
+           .$this->includeDelete();
+    
+    // Add javascripts and stylesheets as configure in app_sf_media_browser_assets_widget
     sfMediaBrowserUtils::loadAssets(sfConfig::get('app_sf_media_browser_assets_widget'));
     $tag .= $this->loadJavascript(array_merge($attributes, array('url' => $url)));
 
-    $tag = $this->wrapTag($tag);
-    return $tag;
+    return $this->wrapTag($tag);
   }
   
 
@@ -95,7 +103,8 @@ EOF;
     $tag = '<a class="delete">delete</a>';
     return $tag;
   }
-
+  
+  
   /**
    * Includes a view tag
    * @return string HTML formatted span class="view"
@@ -105,6 +114,7 @@ EOF;
     $tag = '<a class="view">view</a>';
     return $tag;
   }
+  
 
   /**
    * Wraps a tag within a <span class="sf_media_browser_input_file"></span>
