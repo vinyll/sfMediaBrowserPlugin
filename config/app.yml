@@ -1,11 +1,11 @@
 test:
   sf_media_browser:
-    root_dir:           /tests-uploads
+    root_dir:           /tests-uploads/rootdir
 
 all:
   sf_media_browser:
     root_dir:               /uploads       # Browsable root directory relative to sf_web_dir
-    thumbnails_enabled:     false          # Enable thumbnail creation on upload (requires sfThumnailPlugin)
+    thumbnails_enabled:     false          # Enable thumbnail creation on upload (requires sfImageTransformPlugin)
     thumbnails_dir:         .thumbnails    # Directory name for storing thumbnails
     thumbnails_max_width:   64             # If thumbnails are enabled, you may define their size
     thumbnails_max_height:  64             
