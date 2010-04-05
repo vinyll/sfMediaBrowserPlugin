@@ -19,15 +19,19 @@ sfConfig::set('app_sf_media_browser_root_dir', '/uploads');
 copy(dirname(__FILE__).'/../fixtures/my_test.jpg', sfConfig::get('sf_upload_dir').'/my_test.jpg');
 
 
-$t = new lime_test(13, new lime_output_color());
+$t = new lime_test(14, new lime_output_color());
 
 $file = new sfMediaBrowserFileObjectMock('/uploads/my_test.jpg', sfConfig::get('sf_web_dir'));
+$file->setDirectorySeparator('/');
 
 $t->is($file->cleanFolder('/my/folder'), '/my/folder', '->cleanFolder() preserves well formatted string');
 $t->is($file->cleanFolder('my/folder'), '/my/folder', '->cleanFolder() adds misssing start slash');
 $t->is($file->cleanFolder('/my/folder/'), '/my/folder', '->cleanFolder() removes ending extra slash');
 $t->is($file->cleanFolder('my/folder/'), '/my/folder', '->cleanFolder() reformats missing and extra slashes');
 $t->is($file->cleanFolder('/my//folder'), '/my/folder', '->cleanFolder() reformats double slashes to simple one');
+$file->setDirectorySeparator('\\');
+$t->is($file->cleanFolder('C:\Program Files\\Apache2\apache.exe'), 'C:\Program Files\Apache2\apache.exe', '->cleanFolder() cleans Windows path format');
+$file->setDirectorySeparator('/');
 $t->is($file->getPath(), realpath(sfConfig::get('sf_upload_dir').'/my_test.jpg'), '->getPath() returns well formatted root dir');
 $t->is($file->getUrl(), '/uploads/my_test.jpg', '->getUrl() valid url');
 $t->is($file->getUrlDir(), '/uploads', '->getUrlDir() retrieves the directory part of url');

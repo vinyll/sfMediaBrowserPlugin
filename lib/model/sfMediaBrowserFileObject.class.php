@@ -22,7 +22,8 @@ class sfMediaBrowserFileObject
             $name,
             $type,
             $size,
-            $icon
+            $icon,
+            $directory_separator
             ;
 
   /**
@@ -32,6 +33,8 @@ class sfMediaBrowserFileObject
   public function __construct($file, $root_path = null)
   {
     $this->root_path = $root_path ? realpath($root_path) : realpath(sfConfig::get('sf_web_dir'));
+    
+    $this->directory_separator = DIRECTORY_SEPARATOR;
 
     // $file is absolute
     if($absolute = realpath($file))
@@ -146,10 +149,23 @@ class sfMediaBrowserFileObject
 
   protected function cleanFolder($folder)
   {
-    $cleaned = preg_replace('`/+`', '/', $folder);
-    $cleaned = substr($cleaned, 0, 1) != '/' ? '/'.$cleaned : $cleaned;
-    $cleaned = substr($cleaned, -1, 1) == '/' ? substr($cleaned, 0, -1) : $cleaned;
+    $separator = $this->getDirectorySeparator();
+    $cleaned = preg_replace('`'.$separator.'+`', $separator, $folder);
+    $cleaned = $separator == '/' && substr($cleaned, 0, 1) != $separator ? $separator.$cleaned : $cleaned;
+    $cleaned = substr($cleaned, -1, 1) == $separator ? substr($cleaned, 0, -1) : $cleaned;
     return $cleaned;
+  }
+  
+  
+  public function getDirectorySeparator()
+  {
+    return $this->directory_separator;
+  }
+  
+  
+  public function setDirectorySeparator($separator)
+  {
+    $this->directory_separator = $separator;
   }
   
   
