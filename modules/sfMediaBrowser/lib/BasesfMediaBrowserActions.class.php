@@ -21,14 +21,10 @@ class BasesfMediaBrowserActions extends sfActions
     $this->root_path = realpath(sfConfig::get('sf_web_dir').'/'.$this->root_dir);
     
     $this->requested_dir = urldecode($this->getRequestParameter('dir'));
-    try
-    {
-      $this->checkPath($this->root_path.'/'.$this->requested_dir);
-    }
-    catch(sfSecurityException $e)
-    {
-      $this->requested_dir = '/';
-    }
+    
+    $this->requested_dir = $this->checkPath($this->root_path.'/'.$this->requested_dir)
+                         ? preg_replace('`(/)+`', '/', $this->requested_dir)
+                         : '/';
   }
 
 
