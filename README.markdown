@@ -63,6 +63,24 @@ You can now :
 * doubleclick on a file/folder label to edit its name.
 
 
+## How to enable thumbnails ?
+
+You may automatically display a thumbnail instead of the default image icon
+for files detected as images.
+
+> This requires sfImageTransformPlugin to be installed.
+
+Then, update you /apps/_your\_app_/app.yml :
+
+all:
+  sf_media_browser:
+    thumbnails_enabled:     true
+    …
+
+You may also configure other options such as the thumbnail directory or 
+thumbnail width and height (see the app.yml file for details).
+
+
 ## How to use the file upload widget ?
 
 ![](http://particul.es/blog/public/vince/sfmediabrowserplugin/sfmediabrowserplugin-widget.png)
@@ -101,6 +119,18 @@ _Here we use an "image" field as an example :_
 > See the [full tinymce example page](http://wiki.github.com/vinyll/sfMediaBrowserPlugin/tinymce-example "File upload manager for TinyMCE") for a full working example
 
 
+## How to use with sfAssetsManager ?
+
+The plugin is ready for sfAssetsManager as it bundles and uses a assets_manager.yml file.
+
+There is no specific configuration as it will detect automatically if the plugin is available
+and use it by default.
+
+This replaces the assets configuration in app.yml and makes it more flexible.
+
+See [sfAssetsManagerPlugin](http://github.com/vinyll/sfAssetsManagerPlugin "symfony web assets manager") for details.
+
+
 ## How to configure ?
 
 see the /plugins/sfMediaBrowserPlugin/config/app.yml file for configuration.
@@ -120,12 +150,9 @@ You can participate by many ways :
 
 ## TODO
   
-  - test sfValidatorMediaBrowserFile
   - add another browsing view with folder tree and files seperated ?
   - add image edition functionalities (resize and maybe rotate ?)
-  - add permission managment (sfModularSecurity ?)
   - finish the jquery optional version (dom's filepicker. ajax view ? crop image ?)
-  - add sfDynamics packages managment ?
 
 
 ## About

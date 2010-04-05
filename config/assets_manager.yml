@@ -1,0 +1,23 @@
+packages:
+  sfMediaBrowser.list.jquery: 
+    js:                                  
+      - /js/jquery.js
+      - /js/jquery.dragndrop.js
+      - /sfMediaBrowserPlugin/js/list.jquery.js
+  
+  sfMediaBrowser.list:
+    #import:   sfMediaBrowser.list.jquery     ## Uncomment to enable drag and drop + renaming
+    css:
+      - /sfMediaBrowserPlugin/css/list.css
+  
+  sfMediaBrowser.widget:
+    js:
+      - /sfMediaBrowserPlugin/js/WindowManager.js
+      - /sfMediaBrowserPlugin/js/form_widget.js
+    css:
+      - /sfMediaBrowserPlugin/css/form_widget.css
+      
+  sfMediaBrowser.filepicker:
+    js:
+      - /sfMediaBrowserPlugin/js/FilePicker.js
+      - /sfMediaBrowserPlugin/js/popup.js

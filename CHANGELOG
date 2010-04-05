@@ -5,6 +5,8 @@
 * Added directory validator and security tests [#4 closed]
 * Changed the validating process to mb_strpos for Windows systems [#10]
 * Updated FileObject to consider Windows directory separator [#5]
+* Changed the loading assets system
+* Added assets_manager.yml for sfAssetsManagerPlugin
 
 
 2010-03-26

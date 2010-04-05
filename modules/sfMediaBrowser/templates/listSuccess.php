@@ -1,4 +1,4 @@
-<?php sfMediaBrowserUtils::loadAssets(sfConfig::get('app_sf_media_browser_assets_list')) ?>
+<?php sfMediaBrowserUtils::loadAssets('list') ?>
 <?php use_helper('I18N') ?>
 
 <div id="sf_media_browser_user_message"></div>

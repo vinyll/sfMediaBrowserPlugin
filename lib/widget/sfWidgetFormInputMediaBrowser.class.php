@@ -73,7 +73,7 @@ class sfWidgetFormInputMediaBrowser extends sfWidgetForm
            .$this->includeDelete();
     
     // Add javascripts and stylesheets as configure in app_sf_media_browser_assets_widget
-    sfMediaBrowserUtils::loadAssets(sfConfig::get('app_sf_media_browser_assets_widget'));
+    sfMediaBrowserUtils::loadAssets('widget');
     $tag .= $this->loadJavascript(array_merge($attributes, array('url' => $url)));
 
     return $this->wrapTag($tag);

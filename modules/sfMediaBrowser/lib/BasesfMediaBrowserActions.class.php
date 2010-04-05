@@ -141,14 +141,10 @@ class BasesfMediaBrowserActions extends sfActions
     $this->checkPath(dirname($new_path));
     
     $error = null;
-    try
+    $moved = @rename($current_path, $new_path);
+    if(!$moved)
     {
-      $moved = rename($current_path, $new_path);
-    }
-    catch(Exception $e)
-    {
-      $error = $e;
-      $this->logMessage($e, 'err');
+      $this->logMessage(sprintf('Failed renaming "%s" to "%s".', $curent_path, $new_path), 'err');
     }
     
     if($request->isXmlHttpRequest())

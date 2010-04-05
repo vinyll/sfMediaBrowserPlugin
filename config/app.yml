@@ -8,7 +8,8 @@ all:
     thumbnails_enabled:     false          # Enable thumbnail creation on upload (requires sfImageTransformPlugin)
     thumbnails_dir:         .thumbnails    # Directory name for storing thumbnails
     thumbnails_max_width:   64             # If thumbnails are enabled, you may define their size
-    thumbnails_max_height:  64             
+    thumbnails_max_height:  64   
+    ## Template assets. Please consider using sfAssetsManagerlugin instead !          
     assets_list:                           # Web assets used for the list template.
       js:                                  #   You may change this to use your own.
       #  - /sfMediaBrowserPlugin/js/list.js # You should disable this line if you use JQuery.
@@ -24,6 +25,10 @@ all:
         - /sfMediaBrowserPlugin/js/form_widget.js
       css:
         - /sfMediaBrowserPlugin/css/form_widget.css
+    filepicker:
+      js:
+        - /sfMediaBrowserPlugin/js/FilePicker.js
+        - /sfMediaBrowserPlugin/js/popup.js
     file_types:                           # define file_types is usefull for displaying icons in browser
       document:                           # type of file (also used as default icon name)
         extensions: [doc, xls, xcf, ai]   # extensions associated to this type
@@ -44,5 +49,6 @@ all:
         extensions: [tar, gz, zip, bzip, gzip, rar, 7z]
   sfImageTransformPlugin:       # see sfImageTransformPlugin for more info.
     mime_type:
-      auto_detect: true
+      auto_detect:  true
+      library:      gd_mime_type
         

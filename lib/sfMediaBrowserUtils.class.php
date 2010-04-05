@@ -132,22 +132,40 @@ class sfMediaBrowserUtils
   }
   
   
-  static public function loadAssets(array $assets, sfResponse $response = null)
+  /**
+   * Loads js and css files to the response. This is an abstraction layer
+   * for no dependency of sfAssetsManagerPlugin
+   * @see sfAssetsManagerPlugin
+   * @param string $package package name to load
+   * @param sfWebResponse optional. Context Response by default
+   */
+  static public function loadAssets($package, sfWebResponse $response = null)
   {
     $response = $response ? $response : sfContext::getInstance()->getResponse();
     
-    if(isset($assets['js']) && !empty($assets['js']))
+    // sfAssetsManager
+    if(class_exists('sfAssetsManager'))
     {
-      foreach((array) $assets['js'] as $js)
-      {
-        $response->addJavascript($js);
-      }
+      $manager = sfAssetsManager::getInstance();
+      $manager->load(sprintf('sfMediaBrowser.%s', $package));
     }
-    if(isset($assets['css']) && !empty($assets['css']))
+    // app.yml configuration
+    else
     {
-      foreach((array) $assets['css'] as $css)
+      $config = sfConfig::get(sprintf('app_sf_media_browser_assets_%s', $package));
+      if(isset($config['js']) && !empty($config['js']))
       {
-        $response->addStylesheet($css);
+        foreach((array) $config['js'] as $js)
+        {
+          $response->addJavascript($js);
+        }
+      }
+      if(isset($config['css']) && !empty($config['css']))
+      {
+        foreach((array) $config['css'] as $css)
+        {
+          $response->addStylesheet($css);
+        }
       }
     }
   }
