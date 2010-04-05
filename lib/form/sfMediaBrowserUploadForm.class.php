@@ -10,8 +10,6 @@
 class sfMediaBrowserUploadForm extends sfForm
 {
 
-  protected $upload_dir;
-
   public function configure()
   {
     $this->setWidgets(array(
@@ -22,22 +20,12 @@ class sfMediaBrowserUploadForm extends sfForm
     $this->widgetSchema->setNameFormat('upload[%s]');
 
     $this->setValidators(array(
-      'file'      => new sfValidatorFile(array('path' => $this->getUploadDir())),
-      'directory' => new sfValidatorString(array('required' => false)),
+      'file'      => new sfValidatorFile(array('path' => $this->getValue('directory'))),
+      'directory' => new sfValidatorMediaBrowserDirectory(array(
+                      'relative'  => true,
+                      'root'      => sfConfig::get('sf_web_dir').'/'.sfConfig::get('app_sf_media_browser_root_dir'),
+                      'root_allowed'  => true,
+      )),
     ));
-  }
-
-  public function getUploadDir()
-  {
-    if(!$this->upload_dir)
-    {
-      $this->upload_dir = sfConfig::get('sf_upload_dir');
-    }
-    return $this->upload_dir;
-  }
-
-  public function setUploadDir($dir)
-  {
-    $this->upload_dir = $dir;
   }
 }

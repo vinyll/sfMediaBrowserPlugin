@@ -27,12 +27,21 @@ class sfMediaBrowserFileObject
 
   /**
    *
-   * @param string $file the file path from under web_root
+   * @param string $file the absolute file path or relative (from under web_root)
    */
   public function __construct($file, $root_path = null)
   {
-    $this->file_url = $file;
     $this->root_path = $root_path ? realpath($root_path) : realpath(sfConfig::get('sf_web_dir'));
+
+    // $file is absolute
+    if($absolute = realpath($file))
+    {
+      $this->file_url = preg_replace('`^('.$this->root_path.')`', '', $absolute);
+    }
+    else
+    {
+      $this->file_url = $file;
+    }
   }
   
 
@@ -85,7 +94,7 @@ class sfMediaBrowserFileObject
 
   public function getPath()
   {
-    return realpath($this->cleanFolder($this->getRootPath().'/'.$this->getUrl()));
+    return realpath($this->getRootPath().'/'.$this->getUrl());
   }
   
   

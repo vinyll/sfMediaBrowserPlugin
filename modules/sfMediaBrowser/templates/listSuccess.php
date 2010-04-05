@@ -1,8 +1,5 @@
 <?php sfMediaBrowserUtils::loadAssets(sfConfig::get('app_sf_media_browser_assets_list')) ?>
 <?php use_helper('I18N') ?>
-<script type="text/javascript">
-  delete_msg = "<?php echo __('Are you sure you want to delete this item ?') ?>";
-</script>
 
 <div id="sf_media_browser_user_message"></div>
 
@@ -52,7 +49,7 @@
 
 
 
-<h2><?php echo sprintf(__('Current directory : %s'), $display_dir?$display_dir:'/') ?></h2>
+<h2><?php echo sprintf(__('Current directory : %s'), $display_dir) ?></h2>
 
 
 <ul id="sf_media_browser_list">
@@ -77,12 +74,13 @@
 
 <?php foreach($files as $file): ?>
   <li class="file">
-    <?php include_component('sfMediaBrowser', 'icon', array('file_url' => $relative_dir.'/'.$file)) ?>
+    <?php include_component('sfMediaBrowser', 'icon', array('file_url' => $relative_url.'/'.$file, 'relative_dir' => $relative_dir)) ?>
   </li>
 <?php endforeach ?>
 </ul>
 
 <script type="text/javascript">
+var delete_msg = "<?php echo __('Are you sure you want to delete this item ?') ?>";
 var move_file_url = "<?php echo url_for('sf_media_browser_move') ?>";
 var rename_file_url = "<?php echo url_for('sf_media_browser_rename') ?>";
 </script>

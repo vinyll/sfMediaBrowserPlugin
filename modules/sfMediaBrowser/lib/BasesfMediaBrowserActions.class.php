@@ -14,31 +14,41 @@ class BasesfMediaBrowserActions extends sfActions
 {
   public function preExecute()
   {
-    // symfony web path
-    $this->web_path = sfConfig::get('sf_web_dir');
-
     // Configured root dir
     $this->root_dir = sfconfig::get('app_sf_media_browser_root_dir');
     
-    $this->root_path = realpath($this->web_path.'/'.$this->root_dir);
+    // Calculated root path
+    $this->root_path = realpath(sfConfig::get('sf_web_dir').'/'.$this->root_dir);
+    
+    $this->requested_dir = urldecode($this->getRequestParameter('dir'));
+    try
+    {
+      $this->checkPath($this->root_path.'/'.$this->requested_dir);
+    }
+    catch(sfSecurityException $e)
+    {
+      $this->requested_dir = '/';
+    }
   }
 
 
   public function executeList(sfWebRequest $request)
   {
-    $requested_dir = urldecode($request->getParameter('dir'));
-    $relative_dir = $this->isPathSecured($this->root_path, $this->web_path.'/'.$requested_dir)
-                  ? $requested_dir
-                  : $this->root_dir;
 
-    // browser dir relative to sf_web_dir
-    $this->relative_dir = $relative_dir;
+    $display_dir = preg_replace('`^('.$this->root_dir.')`', '', $this->requested_dir);
+
+    // dir relative to root_dir
+    $this->relative_dir = $this->requested_dir;
+    // dir relative to /web
+    $this->relative_url = $this->root_dir.$this->requested_dir;
     // User dispay dir
-    $this->display_dir = preg_replace('`^('.$this->root_dir.')`', '', $relative_dir);
+    $this->display_dir = $display_dir ? $display_dir : '/';
     // browser parent dir
-    $this->parent_dir = $this->relative_dir != $this->root_dir ? dirname($this->relative_dir) : '';
+    $this->parent_dir = dirname($this->relative_dir) && dirname($this->relative_dir) != $this->relative_dir
+                      ? dirname($this->relative_dir)
+                      : null;
     // system path for current dir
-    $this->path = $this->web_path.$relative_dir;
+    $this->path = $this->root_path.$this->requested_dir;
     
     // list of sub-directories in current dir
     $this->dirs = $this->getDirectories($this->path);
@@ -48,8 +58,8 @@ class BasesfMediaBrowserActions extends sfActions
     $this->current_params = $request->getGetParameters();
     
     // forms
-    $this->upload_form = new sfMediaBrowserUploadForm(array('directory' => $relative_dir));
-    $this->dir_form = new sfMediaBrowserDirectoryForm(array('directory' => $relative_dir));
+    $this->upload_form = new sfMediaBrowserUploadForm(array('directory' => $this->display_dir));
+    $this->dir_form = new sfMediaBrowserDirectoryForm(array('directory' => $this->display_dir));
   }
 
 
@@ -67,20 +77,26 @@ class BasesfMediaBrowserActions extends sfActions
     $form->bind($request->getParameter('directory'));
     if($form->isValid())
     {
-      $real_path = realpath($this->web_path.'/'.$form->getValue('directory'));
-      $full_name = $real_path.'/'.$form->getValue('name');
-      $created = @mkdir($full_name);
-      @chmod($full_name, 0777);
+      $real_path = $form->getValue('directory');
+      $new_dir = $form->getValue('directory').'/'.$form->getValue('name');
+      $created = @mkdir($new_dir);
+      @chmod($new_dir, 0777);
       $this->getUser()->setFlash($created ? 'notice' : 'error', 'directory.create');
     }
-    $this->redirect($request->getReferer());
+    else
+    {
+      $this->getUser()->setFlash('error', 'directory.create');
+    }
+   $this->redirect($request->getReferer());
   }
 
 
   public function executeDeleteDirectory(sfWebRequest $request)
   {
-    $dir = new sfMediaBrowserFileObject(urldecode($request->getParameter('directory')));
-    $deleted = sfMediaBrowserUtils::deleteRecursive($dir->getPath());
+    $path = $this->root_path.'/'.urldecode($request->getParameter('directory'));
+    $this->checkPath($path);
+  
+    $deleted = sfMediaBrowserUtils::deleteRecursive($path);
     $this->getUser()->setFlash($deleted ? 'notice' : 'error', 'directory.delete');
     $this->redirect($request->getReferer());
   }
@@ -89,8 +105,8 @@ class BasesfMediaBrowserActions extends sfActions
   public function executeCreateFile(sfWebRequest $request)
   {
     $upload = $request->getParameter('upload');
+    $this->checkPath($this->root_path.'/'.$upload['directory']);
     $form = new sfMediaBrowserUploadForm();
-    $form->setUploadDir($upload['directory']);
     $form->bind($upload, $request->getFiles('upload'));
     if($form->isValid())
     {
@@ -99,12 +115,14 @@ class BasesfMediaBrowserActions extends sfActions
       $name = sfMediaBrowserStringUtils::slugify(pathinfo($filename, PATHINFO_FILENAME));
       $ext = pathinfo($filename, PATHINFO_EXTENSION);
       $fullname = $ext ? $name.'.'.$ext : $name;
-      $destination_dir = realpath(sfConfig::get('sf_web_dir').'/'.$upload['directory']);
+      $destination_dir = realpath($this->root_path.'/'.$upload['directory']);
+      
       // thumbnail
       if(sfConfig::get('app_sf_media_browser_thumbnails_enabled', false) && sfMediaBrowserUtils::getTypeFromExtension($ext) == 'image')
       {
         $this->generateThumbnail($post_file->getTempName(), $fullname, $destination_dir);
       }
+      
       $this->getUser()->setFlash('notice', 'file.create');
       $post_file->save($destination_dir.'/'.$fullname);
     }
@@ -121,18 +139,20 @@ class BasesfMediaBrowserActions extends sfActions
    */
   public function executeMove(sfWebRequest $request)
   {
-    $file = new sfMediaBrowserFileObject($request->getParameter('file'));
-    $dir = new sfMediaBrowserFileObject(urldecode($request->getParameter('dir')));
-    $new_name = $dir->getPath().'/'.$file->getName(true);
+    $current_path = $this->root_path.'/'.$request->getParameter('file');
+    $new_path = $this->root_path.'/'.urldecode($request->getParameter('dir'));
+    $this->checkPath($current_path);
+    $this->checkPath(dirname($new_path));
     
     $error = null;
     try
     {
-      $moved = rename($file->getPath(), $new_name);
+      $moved = rename($current_path, $new_path);
     }
     catch(Exception $e)
     {
       $error = $e;
+      $this->logMessage($e, 'err');
     }
     
     if($request->isXmlHttpRequest())
@@ -146,7 +166,7 @@ class BasesfMediaBrowserActions extends sfActions
       {
         $response = array('status' => 'notice', 'message' => __('The file was successfully moved.'));
       }
-      elseif(file_exists($new_name))
+      elseif(file_exists($new_path))
       {
         $response = array('status' => 'error', 'message' => __('A file with the same name already exists in this folder.'));
       }
@@ -176,6 +196,7 @@ class BasesfMediaBrowserActions extends sfActions
     catch(Exception $e)
     {
       $error = $e;
+      $this->logMessage($e, 'err');
     }
     
     if($request->isXmlHttpRequest())
@@ -228,7 +249,9 @@ class BasesfMediaBrowserActions extends sfActions
 
   public function executeDeleteFile(sfWebRequest $request)
   {
-    $file = $this->createFileObject(urldecode($request->getParameter('file')));
+    $path = urldecode($request->getParameter('file'));
+    $this->checkPath($this->root_path.'/'.$path);
+    $file = $this->createFileObject($this->root_path.'/'.$path);
     $file->delete();
     $this->getUser()->setFlash('notice', 'file.delete');
     $this->redirect($request->getReferer());
@@ -237,6 +260,24 @@ class BasesfMediaBrowserActions extends sfActions
   
 # Protected
 
+  protected function checkPath($path)
+  {
+    $validator = new sfValidatorMediaBrowserDirectory(array('root' => $this->root_path));
+    try
+    {
+      $validator->clean($path);
+      return true;
+    }
+    catch(sfValidatorError $e)
+    {}
+    return false;
+  }
+  
+  /**
+   *
+   * @param $file string path
+   * @return sfMediaBrowserFileObject
+   */
   protected function createFileObject($file)
   {
     $class = sfMediaBrowserUtils::getTypeFromExtension(pathinfo($file, PATHINFO_EXTENSION)) == 'image'
@@ -244,18 +285,6 @@ class BasesfMediaBrowserActions extends sfActions
             : 'sfMediaBrowserFileObject'
             ;
     return new $class($file);
-  }
-
-  
-  /**
-   *
-   * @param string $root_path
-   * @param string $dir
-   * @return mixed <string, boolean>
-   */
-  protected function isPathSecured($root_path, $requested_path)
-  {
-    return preg_match('`^'.realpath($root_path).'`', realpath($requested_path));
   }
 
 

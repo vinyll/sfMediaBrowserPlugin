@@ -1,13 +1,13 @@
 <?php
 include dirname(__FILE__).'/../bootstrap/functional.php';
-include dirname(__FILE__).'/sfTestFunctionalMediaBrowser.class.php';
+include dirname(__FILE__).'/../../lib/test/sfTestFunctionalMediaBrowser.class.php';
 
 $upload_dir = sfConfig::get('sf_web_dir').'/'.sfConfig::get('app_sf_media_browser_root_dir', 'tests-uploads');
 $delete_upload_dir = false;
 if(!realpath($upload_dir))
 {
   $delete_upload_dir = true;
-  mkdir($upload_dir);
+  mkdir($upload_dir, 0777, true);
   chmod($upload_dir, 0777);
 }
 

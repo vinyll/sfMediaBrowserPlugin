@@ -9,20 +9,22 @@
  */
 class sfMediaBrowserDirectoryForm extends sfForm
 {
-  protected $parent_dir;
-
   public function configure()
   {
     $this->setWidgets(array(
       'name'      => new sfWidgetFormInput(),
-      'directory' => new sfWidgetFormInputHidden(array('default' => $this->parent_dir)),
+      'directory' => new sfWidgetFormInputHidden(),
     ));
 
     $this->widgetSchema->setNameFormat('directory[%s]');
-
+    
     $this->setValidators(array(
       'name'      => new sfValidatorString(array('trim' => true)),
-      'directory' => new sfValidatorString(array('required' => false)),
+      'directory' => new sfValidatorMediaBrowserDirectory(array(
+              'relative'  => true,
+              'root'      => sfConfig::get('sf_web_dir').'/'.sfConfig::get('app_sf_media_browser_root_dir'),
+              'root_allowed' => true,
+      )),
     ));
     
     $this->getValidatorSchema()->setPostValidator(
@@ -35,10 +37,4 @@ class sfMediaBrowserDirectoryForm extends sfForm
     $values['name'] = sfMediaBrowserStringUtils::slugify($values['name']);
     return $values;
   }
-
-  public function setParentDirectory($parent_dir)
-  {
-    $this->parent_dir = $parent_dir;
-  }
-  
 }
