@@ -70,7 +70,7 @@ class sfValidatorMediaBrowserDirectory extends sfValidatorBase
       }
       // value is not inside root
       $root_mask = $this->getOption('root_allowed') ? $root : $root.'/';
-      if(!preg_match('`^'.$root_mask.'`', $full_path))
+      if(mb_strpos($full_path, $root_mask) !== 0)
       {
         throw new sfValidatorError($this, 'invalid', array('directory' => $full_path));
       }
