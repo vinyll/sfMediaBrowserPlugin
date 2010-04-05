@@ -1,5 +1,7 @@
 <?php sfMediaBrowserUtils::loadAssets('list') ?>
 <?php use_helper('I18N') ?>
+<?php $upload_form->getWidgetSchema()->setFormFormatterName('list') ?>
+<?php $dir_form->getWidgetSchema()->setFormFormatterName('list') ?>
 
 <div id="sf_media_browser_user_message"></div>
 

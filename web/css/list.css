@@ -1,11 +1,20 @@
+h2 {
+  clear:  both;
+}
+
 #sf_media_browser_forms {
   border-bottom:  1px solid #CCC;
   margin-bottom:  10px;
   padding-bottom: 10px;
 }
 
-h2 {
-  clear:  both;
+#sf_media_browser_forms li {
+  list-style: none;
+  float:      left;
+}
+
+#sf_media_browser_forms input.submit {
+  float:  left;
 }
 
 fieldset#sf_media_browser_upload, fieldset#sf_media_browser_mkdir {
@@ -16,12 +25,12 @@ fieldset#sf_media_browser_upload, fieldset#sf_media_browser_mkdir {
   padding-top:  20px;
   margin-top:   20px;
 }
+
 #sf_media_browser_upload legend, #sf_media_browser_mkdir legend {
   font-weight:  bold;
   margin-top:   -20px;
   border-bottom:  1px solid #CCC;
 }
-
 
 ul#sf_media_browser_list {
   list-style: none;
