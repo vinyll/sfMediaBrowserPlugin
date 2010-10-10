@@ -71,6 +71,7 @@
       <trans-unit id="17">
         <source>The directory could not be created.</source>
         <target>Не могу создать папку.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
