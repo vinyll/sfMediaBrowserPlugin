@@ -39,7 +39,7 @@ class sfMediaBrowserFileObject
     // $file is absolute
     if($absolute = realpath($file))
     {
-      $this->file_url = preg_replace('`^('.$this->root_path.')`', '', $absolute);
+      $this->file_url = str_replace($this->root_path, '', $absolute);
     }
     else
     {
