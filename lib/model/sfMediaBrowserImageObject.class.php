@@ -80,6 +80,10 @@ class sfMediaBrowserImageObject extends sfMediaBrowserFileObject
     {
       return $thumbnail->getUrl();
     }
+    elseif(sfConfig::get('app_sf_media_browser_thumbnails_simulated', false))
+    {
+      return $this->getUrl();
+    }
     return parent::getIcon();
   }
   
