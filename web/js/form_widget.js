@@ -22,7 +22,7 @@ HTMLElement.prototype.getElementByTagName = function(tag_name, index) {
 
 HTMLElement.prototype.getElementsByClassName = function(class_name) {
   var tags = this.getElementsByTagName('*');
-  var matches = [], i=0; tag;
+  var matches = [], i=0, tag;
   for(i; i<tags.length;++i) {
     tag = tags[i];
     if(tag.hasAttribute('class') && tag.getAttribute('class') == class_name)
