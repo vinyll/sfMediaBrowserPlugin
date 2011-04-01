@@ -151,7 +151,11 @@ class sfMediaBrowserFileObject
   {
     $separator = $this->getDirectorySeparator();
     $cleaned = preg_replace('`'.$separator.'+`', $separator, $folder);
-    $cleaned = $separator == '/' && substr($cleaned, 0, 1) != $separator ? $separator.$cleaned : $cleaned;
+    //do not add a slash for windows
+    $os = strtoupper($_SERVER['SERVER_SOFTWARE']);
+    if(!preg_match('/WIN/',$os)) {
+      $cleaned = $separator == '/' && substr($cleaned, 0, 1) != $separator ? $separator.$cleaned : $cleaned;
+    }
     $cleaned = substr($cleaned, -1, 1) == $separator ? substr($cleaned, 0, -1) : $cleaned;
     return $cleaned;
   }
