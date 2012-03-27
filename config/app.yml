@@ -26,7 +26,7 @@ all:
         - /sfMediaBrowserPlugin/js/form_widget.js
       css:
         - /sfMediaBrowserPlugin/css/form_widget.css
-    filepicker:
+    assets_filepicker:
       js:
         - /sfMediaBrowserPlugin/js/FilePicker.js
         - /sfMediaBrowserPlugin/js/popup.js
