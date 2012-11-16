@@ -1,6 +1,10 @@
 <?php use_helper('I18N') ?>
 <div class="icon">
-  <?php echo link_to(image_tag($file->getIcon()), $file->getUrl(), array('target' => '_blank')) ?>
+  <?php if ($file->getCallbackUrl()): ?>
+    <?php echo link_to(image_tag($file->getIcon()), $file->getCallbackUrl(), array('target' => '_blank')) ?>
+  <?php else: ?>
+    <?php echo link_to(image_tag($file->getIcon()), $file->getUrl(), array('target' => '_blank')) ?>
+  <?php endif; ?>
 </div>
 <label class="name"><?php echo $file->getName() ?></label>
 <div class="action">

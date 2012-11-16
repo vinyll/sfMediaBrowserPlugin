@@ -14,6 +14,7 @@
     </form>
   </fieldset>
 
+<?php if (!isset($disable_dir_create)): ?>
   <fieldset id="sf_media_browser_mkdir">
     <legend><?php echo __('Create a new directory') ?></legend>
     <form action="<?php echo url_for('sf_media_browser_dir_create') ?>" method="post">
@@ -21,6 +22,7 @@
       <input type="submit" class="submit" value="<?php echo __('Create') ?>" />
     </form>
   </fieldset>
+<?php endif; ?>
   <div class="clear"></div>
 </div>
 
@@ -49,10 +51,7 @@
   </div>
 <?php endif ?>
 
-
-
 <h2><?php echo sprintf(__('Current directory : %s'), $display_dir) ?></h2>
-
 
 <ul id="sf_media_browser_list">
 
@@ -76,7 +75,11 @@
 
 <?php foreach($files as $file): ?>
   <li class="file">
-    <?php include_component('sfMediaBrowser', 'icon', array('file_url' => $relative_url.'/'.$file, 'relative_dir' => $relative_dir)) ?>
+    <?php if (isset($callback_route_pattern)): ?>
+      <?php include_component('sfMediaBrowser', 'icon', array('file_url' => $relative_url . '/' . $file, 'relative_dir' => $relative_dir, 'callback_route_pattern' => $callback_route_pattern)) ?>
+    <?php else: ?>
+      <?php include_component('sfMediaBrowser', 'icon', array('file_url' => $relative_url . '/' . $file, 'relative_dir' => $relative_dir)) ?>
+    <?php endif; ?>
   </li>
 <?php endforeach ?>
 </ul>

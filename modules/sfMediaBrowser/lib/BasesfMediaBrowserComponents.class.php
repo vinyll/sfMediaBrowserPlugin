@@ -14,7 +14,12 @@ class BasesfMediaBrowserComponents extends sfComponents
            ? 'sfMediaBrowserImageObject'
            : 'sfMediaBrowserFileObject'
            ;
-    $this->file = new $class($this->file_url);
+    $this->file = new $class($this->file_url, $this->root_path);
+    
+    if ($this->callback_route_pattern)
+    {
+        $url = url_for(sprintf($this->callback_route_pattern, $this->file->getName()));
+        $this->file->setCallbackUrl($url);
+    }
   }
-  
 }

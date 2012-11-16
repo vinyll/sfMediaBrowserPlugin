@@ -52,7 +52,7 @@ class BasesfMediaBrowserActions extends sfActions
     $this->files = $this->getFiles($this->path);
     $this->current_route = $this->getContext()->getRouting()->getCurrentRouteName();
     $this->current_params = $request->getGetParameters();
-    
+
     // forms
     $this->upload_form = new sfMediaBrowserUploadForm(array('directory' => $this->display_dir));
     $this->dir_form = new sfMediaBrowserDirectoryForm(array('directory' => $this->display_dir));
@@ -276,7 +276,7 @@ class BasesfMediaBrowserActions extends sfActions
             ? 'sfMediaBrowserImageObject'
             : 'sfMediaBrowserFileObject'
             ;
-    return new $class($file);
+    return new $class($file, $this->root_path);
   }
 
 
