@@ -12,7 +12,6 @@ class sfMediaBrowserActions extends BasesfMediaBrowserActions
 {
     public function preExecute()
     {
-        $this->getLogger()->info(">>> sfMediaBrowserActions::preExecute");
         $user = $this->getUser();
         if (!$user->isAuthenticated())
         {
