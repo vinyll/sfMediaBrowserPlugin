@@ -23,7 +23,8 @@ class sfMediaBrowserFileObject
             $type,
             $size,
             $icon,
-            $directory_separator
+            $directory_separator,
+            $callback_url
             ;
 
   /**
@@ -180,5 +181,15 @@ class sfMediaBrowserFileObject
       return unlink($this->getPath());
     }
     return false;
+  }
+  
+  public function setCallbackUrl($url)
+  {
+      $this->callback_url = $url;
+  }
+  
+  public function getCallbackUrl()
+  {
+      return $this->callback_url;
   }
 }

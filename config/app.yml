@@ -28,6 +28,7 @@ all:
         - /sfMediaBrowserPlugin/css/form_widget.css
     assets_filepicker:
       js:
+        - /sfMediaBrowserPlugin/js/tiny_mce/tiny_mce_popup.js
         - /sfMediaBrowserPlugin/js/FilePicker.js
         - /sfMediaBrowserPlugin/js/popup.js
     file_types:                           # define file_types is usefull for displaying icons in browser
