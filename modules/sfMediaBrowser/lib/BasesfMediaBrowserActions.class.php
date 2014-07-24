@@ -144,7 +144,8 @@ class BasesfMediaBrowserActions extends sfActions
     $moved = @rename($current_path, $new_path);
     if(!$moved)
     {
-      $this->logMessage(sprintf('Failed renaming "%s" to "%s".', $curent_path, $new_path), 'err');
+      $this->logMessage(sprintf('Failed renaming "%s" to "%s".', $current_path, $new_path), 'err');
+      $error = true;
     }
     
     if($request->isXmlHttpRequest())
@@ -152,7 +153,7 @@ class BasesfMediaBrowserActions extends sfActions
       sfContext::getInstance()->getConfiguration()->loadHelpers(array('I18N'));
       if($error)
       {
-        $reponse = array('status' => 'error', 'message' => __('Some error occured.'));
+        $response = array('status' => 'error', 'message' => __('Some error occured.'));
       }
       elseif($moved)
       {
